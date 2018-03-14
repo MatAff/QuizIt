@@ -9,8 +9,12 @@ public class QuizIt {
         // Set file name
         String fileName = "items.csv";
 
-        // Load items
-        List<Item> items = ItemLoader.load(fileName);
+        // Load itembank
+        ItemBank itemBank = new ItemBank(fileName);
+
+        // Get random item
+        Item i = itemBank.randomItem();
+        System.out.println(i);
 
     } 
 
