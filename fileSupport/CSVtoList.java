@@ -7,7 +7,7 @@ import java.util.*;
 public class CSVtoList {
 
     // Method to load content into two-dimentional list
-    public static List<List<String>> getCsvContent(String fileName) {
+    public static List<List<String>> getContent(String fileName) {
 
         // Create file
         File f = new File(fileName);
@@ -38,7 +38,7 @@ public class CSVtoList {
     }
 
     // Method to print two-dimentional list to console
-    public static void printCsvContent(List<List<String>> content, int maxLine) {
+    public static void printContent(List<List<String>> content, int maxLine) {
     
         for(int l = 0;l < maxLine; l++)
         {

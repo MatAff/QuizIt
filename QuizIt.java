@@ -6,14 +6,19 @@ public class QuizIt {
 
     public static void main(String[] args) {
 
-        // Set file name
-        String fileName = "items.csv";
+        // Set file names
+        String ibFileName = "items.csv";
+        String rbFileName = "responses.csv";
 
         // Load itembank
-        ItemBank itemBank = new ItemBank(fileName);
+        ItemBank ib = new ItemBank(ibFileName);
+
+        // Load responsebank
+        ResponseBank rb = new ResponseBank(rbFileName);
+        //rb.print(10);
 
         // Get random item
-        Item i = itemBank.randomItem();
+        Item i = ib.randomItem();
         System.out.println(i);
 
     } 

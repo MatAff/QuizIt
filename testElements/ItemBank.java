@@ -12,10 +12,10 @@ public class ItemBank {
     public ItemBank(String fileName) {
     
         // Load file content
-        List<List<String>> content = CSVtoList.getCsvContent(fileName);
+        List<List<String>> content = CSVtoList.getContent(fileName);
 
         // Debug - Print content
-        //CSVtoList.printCsvContent(content, 10);
+        //CSVtoList.printContent(content, 10);
 
         // Initialize list
         items = new ArrayList<>();
@@ -38,7 +38,7 @@ public class ItemBank {
 
     // Method to select and return random item
     public Item randomItem() {
-        int itemNr = (int) Math.random() * items.size();
+        int itemNr = (int) (Math.random() * items.size());
         return items.get(itemNr);
     }
 
