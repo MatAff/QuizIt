@@ -1,6 +1,7 @@
 
 import testElements.*;
 import java.util.*;
+import fileSupport.*; // Should be moved to ResponsesBank and not accessed from here
 
 public class QuizIt {
 
@@ -40,6 +41,11 @@ public class QuizIt {
         // Compute overview
         Map<Integer, Double> propMap = pm.getChapPerform(rb);
         System.out.println(pm.getChapBelow(0.75, chapters));
+ 
+        // Convert response bank to list (for saving as csv)
+        List<List<String>> l = rb.toList();
+        CSVtoList.writeContent("test.csv", l);
+        System.out.println(l);
         
     } 
 

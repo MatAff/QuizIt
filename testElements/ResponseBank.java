@@ -7,11 +7,14 @@ import java.util.stream.*;
 
 public class ResponseBank {
 
-    // List of responses
+    String fileName;
     List<Response> responses;
+    List<String> header;
 
     // Load responses from file
     public ResponseBank(String fileName) {
+     
+        this.fileName = fileName;
 
         // Initialize list
         responses = new ArrayList<>();
@@ -20,12 +23,16 @@ public class ResponseBank {
         List<List<String>> content = CSVtoList.getContent(fileName);
 
         // Add responses to list
-        List<String> header = content.get(0);
+        header = content.get(0);
         for(int i = 1; i < content.size(); i++) {
             List<String> line = content.get(i);
             responses.add(new Response(header, line));
         }
      
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 
     // Method to print itembank
@@ -59,7 +66,7 @@ public class ResponseBank {
         return (double) p.get(true).size() / (p.get(false).size() + p.get(true).size());
     }
  
-    // Get chapter lis
+    // Get chapter list
     public List<Integer> getChapters() {
         List<Integer> chapters = responses.stream()
             .map(r -> r.chapter)
@@ -67,6 +74,16 @@ public class ResponseBank {
             .sorted()
             .collect(Collectors.toList());
         return chapters;
+    }
+
+    // Method to convert response bank to list (for saving as csv)
+    public List<List<String>> toList() {
+        List<List<String>> l = new ArrayList<>();
+        l.add(header);
+        for(Response r : responses) {
+            l.add(r.toList(header));
+        }
+        return l;
     }
  
 } 

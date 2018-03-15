@@ -18,6 +18,30 @@ public class Response {
         }
     }
 
+    // To list method (for saving)
+    public List<String> toList(List<String> header) {
+        List<String> l = new ArrayList<>();
+        for(String s : header) {
+            switch(s.toLowerCase()) {
+                case "fullref":
+                    l.add(fullRef);
+                    break;
+                 case "datetime":
+                     //this.dateTime = Integer.valueOf(value);
+                     break;
+                 case "correct":
+                     l.add(correct ? "1" : "0");
+                     break;
+                 case "chapter":
+                     l.add(chapter.toString());
+                     break;
+                 default:
+                     l.add(null);
+             }
+         }
+         return l;
+    }
+
     // Set something
     public boolean setValue(String type, String value) {
          switch(type.toLowerCase()) {
