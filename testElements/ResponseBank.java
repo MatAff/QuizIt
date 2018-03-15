@@ -31,8 +31,12 @@ public class ResponseBank {
      
     }
 
-    public String getFileName() {
-        return fileName;
+    // Save to CSV
+    public void save() {
+
+        // Convert response bank to list (for saving as csv)
+        List<List<String>> l = this.toList();
+        CSVtoList.writeContent(fileName, l);
     }
 
     // Method to print itembank
