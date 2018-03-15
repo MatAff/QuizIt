@@ -50,15 +50,24 @@ public class ResponseBank {
     // Compute proportion correct by chapter
     public double propCorrectChapter(int nr, int chapter) {
         List<Response> subRes = responses
-                                .stream()
-                                .filter(r -> r.chapter==chapter)
-                                .collect(Collectors.toList());
+            .stream()
+            .filter(r -> r.chapter==chapter)
+            .collect(Collectors.toList());
         Map<Boolean, List<Response>> p = subRes.stream()
-            .skip(subRes.size() - nr)
+            .skip(Math.max(subRes.size() - nr,0))
             .collect(Collectors.partitioningBy(r -> r.correct));
         return (double) p.get(true).size() / (p.get(false).size() + p.get(true).size());
     }
-
+ 
+    // Get chapter lis
+    public List<Integer> getChapters() {
+        List<Integer> chapters = responses.stream()
+            .map(r -> r.chapter)
+            .distinct()
+            .sorted()
+            .collect(Collectors.toList());
+        return chapters;
+    }
  
 } 
 
