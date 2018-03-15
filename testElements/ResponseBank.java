@@ -3,6 +3,7 @@ package testElements;
 
 import java.util.*;
 import fileSupport.*;
+import java.util.stream.*;
 
 public class ResponseBank {
 
@@ -28,8 +29,34 @@ public class ResponseBank {
     }
 
     // Method to print itembank
+    public void print() {
+        this.print(responses.size());
+    }
+
+    // Method to print itembank with limit
     public void print(int maxNr) {
         responses.stream().limit(maxNr).forEach(System.out::println);
+    }
+
+    // Compute proportion correct
+    public double propCorrect(int nr) {
+        long nrCorrect = responses.stream()
+                         .skip(responses.size() - nr)
+                         .filter(r -> r.correct)
+                         .count();
+        return nrCorrect / (double) nr;
+    }
+
+    // Compute proportion correct by chapter
+    public double propCorrectChapter(int nr, int chapter) {
+        List<Response> subRes = responses
+                                .stream()
+                                .filter(r -> r.chapter==chapter)
+                                .collect(Collectors.toList());
+        Map<Boolean, List<Response>> p = subRes.stream()
+            .skip(subRes.size() - nr)
+            .collect(Collectors.partitioningBy(r -> r.correct));
+        return (double) p.get(true).size() / (p.get(false).size() + p.get(true).size());
     }
 
  

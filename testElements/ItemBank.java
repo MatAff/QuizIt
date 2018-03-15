@@ -3,6 +3,7 @@ package testElements;
 
 import java.util.*;
 import fileSupport.*;
+import java.util.stream.*;
 
 public class ItemBank {
 
@@ -40,6 +41,15 @@ public class ItemBank {
     public Item randomItem() {
         int itemNr = (int) (Math.random() * items.size());
         return items.get(itemNr);
+    }
+
+    // Select from chapter
+    public Item chapterItem(List<Integer> chapters) {
+        List<Item> subItems = items.stream().
+                              filter(i -> chapters.contains(i.chapter)).
+                              collect(Collectors.toList());
+        int itemNr = (int) (Math.random() * subItems.size());
+        return subItems.get(itemNr);
     }
 
 } 

@@ -9,6 +9,7 @@ public class Response {
     String fullRef;
     LocalDateTime dateTime;
     Boolean correct;
+    Integer chapter;
 
     // Constructor
     public Response(List<String> header, List<String> content) {
@@ -29,6 +30,9 @@ public class Response {
              case "correct":
                  this.correct = value.equals("1");
                  return true;
+             case "chapter":
+                 this.chapter = Integer.valueOf(value);
+                 return true;
          }
          return false;
  
@@ -40,6 +44,7 @@ public class Response {
         String s = "";
         if (fullRef!=null) { s = s + fullRef + "; "; }
         if (correct!=null) { s = s + correct + "; "; }
+        if (chapter!=null) { s = s + chapter + "; "; }
         return s;
     }
 
