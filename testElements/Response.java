@@ -18,6 +18,23 @@ public class Response {
         }
     }
 
+    // Constructor for new items
+    public Response(List<String> header, Item item, Boolean correct) {
+        for(String s : header) {
+             switch(s.toLowerCase()) {
+                 case "fullref":
+                     this.fullRef = item.fullRef;
+                     break;
+                 case "correct":
+                     this.correct = correct;
+                     break;
+                 case "chapter":
+                     this.chapter = item.chapter;
+                     break;
+              }
+        }
+    }
+
     // To list method (for saving)
     public List<String> toList(List<String> header) {
         List<String> l = new ArrayList<>();

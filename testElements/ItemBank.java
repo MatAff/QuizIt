@@ -4,6 +4,8 @@ package testElements;
 import java.util.*;
 import fileSupport.*;
 import java.util.stream.*;
+import numberSupport.*;
+import java.util.function.*;
 
 public class ItemBank {
 
@@ -50,6 +52,44 @@ public class ItemBank {
                               collect(Collectors.toList());
         int itemNr = (int) (Math.random() * subItems.size());
         return subItems.get(itemNr);
+    }
+
+    // Interpolation of page question number
+    public double interpolatePageQuestion(Item item) {
+
+        // Test generic interpolation method
+        System.out.println(NSupport.interpolate(item, items, (theItem) -> theItem.pageQuestion));
+
+        if (item.pageQuestion!=null) {
+            return item.pageQuestion;
+        } else {
+ 
+            int startIndex = -999;
+            int startPage = -999;
+            int endIndex = -999;
+            int endPage = -999;
+
+            int ind = items.indexOf(item);
+
+            Function<Item, Integer> func = theItem -> theItem.pageQuestion;
+            for(int s = ind; s >= 0; s--) {
+                Integer val = func.apply(items.get(s));
+                //if(items.get(s).pageQuestion!=null) {
+                if(val!=null) {
+                    startIndex = s;
+                    startPage = val; //items.get(s).pageQuestion;
+                    break;
+                }
+            }
+            for(int e = ind; e < items.size(); e++) {
+                if(items.get(e).pageQuestion!=null) {
+                    endIndex = e;
+                    endPage = items.get(e).pageQuestion;
+                    break;
+                }
+            }
+            return NSupport.interpolate(ind, startIndex, startPage, endIndex, endPage);
+        }
     }
 
 } 

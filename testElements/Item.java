@@ -2,6 +2,7 @@
 package testElements;
 
 import java.util.*;
+import numberSupport.*;
 
 public class Item {
 
@@ -41,6 +42,13 @@ public class Item {
              case "fullref":
                  this.fullRef = value;
                  return true;
+             case "pagequestion":
+                 //this.pageQuestion = Integer.valueOf(value);
+                 this.pageQuestion = NSupport.createInteger(value);
+                 return true;
+             case "pageanswer":
+                 this.pageAnswer =  Integer.valueOf(value);
+                 return true;
          }
          return false;
  
@@ -54,6 +62,8 @@ public class Item {
         if (chapter!=null) { s = s + chapter + "; "; }
         if (chapterItemNr!=null) { s = s + chapterItemNr + "; "; }
         if (fullRef!=null) { s = s + fullRef + "; "; }
+        if (pageQuestion!=null) { s = s + pageQuestion + "; "; }
+        if (pageAnswer!=null) { s = s + pageAnswer + "; "; }
         return s;
     }
 

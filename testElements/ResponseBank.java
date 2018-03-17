@@ -31,6 +31,12 @@ public class ResponseBank {
      
     }
 
+    // Add response
+    public void add(Item item, Boolean correct) {
+        Response r = new Response(header, item, correct);
+        responses.add(r);
+    }
+
     // Save to CSV
     public void save() {
 
