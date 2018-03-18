@@ -3,6 +3,7 @@ package testElements;
 
 import java.util.*;
 import java.util.stream.*;
+import printSupport.*;
 
 public class PerformManager {
 
@@ -42,9 +43,11 @@ public class PerformManager {
     public List<Integer> getChapBelow(double th, List<Integer> chapters, boolean print) {
         problemChap = new ArrayList<>();
         for(Integer c : chapters) {
-            System.out.println(c + " " + propMap.get(c));
             if (propMap.get(c) < th) {
                 problemChap.add(c);
+                PSupport.printColor(c + " " + propMap.get(c),"red");
+            } else {
+                PSupport.printColor(c + " " + propMap.get(c),"green");
             }
         }
         return problemChap;
