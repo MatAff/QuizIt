@@ -39,9 +39,10 @@ public class PerformManager {
     }
 
     // Get chapter below thresshold
-    public List<Integer> getChapBelow(double th, List<Integer> chapters) {
+    public List<Integer> getChapBelow(double th, List<Integer> chapters, boolean print) {
         problemChap = new ArrayList<>();
         for(Integer c : chapters) {
+            System.out.println(c + " " + propMap.get(c));
             if (propMap.get(c) < th) {
                 problemChap.add(c);
             }

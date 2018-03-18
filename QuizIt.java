@@ -39,16 +39,14 @@ public class QuizIt {
             
             // Compute overview
             Map<Integer, Double> propMap = pm.getChapPerform(rb);
-            System.out.println(propMap);
-            List<Integer> probChaps = pm.getChapBelow(0.75, chapters);
-            System.out.println(probChaps);
+            List<Integer> probChaps = pm.getChapBelow(0.75, chapters, true); // true > prints
             System.out.println("");
 
             // Select item
-            Item item = ib.chapterItem(chapters);
+            Item item = ib.chapterItem(probChaps);
             System.out.println(item);
-            System.out.println(ib.interpolatePageQuestion(item));
-            System.out.println(ib.interpolatePageAnswer(item));
+            System.out.println("Page number " + ib.interpolatePageQuestion(item));
+            System.out.println("Page number answer " + ib.interpolatePageAnswer(item));
 
             // Read something
             if (console != null) { userInput = console.readLine(); }

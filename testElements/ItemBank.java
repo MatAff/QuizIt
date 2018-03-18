@@ -58,7 +58,7 @@ public class ItemBank {
     public double interpolatePageQuestion(Item item) {
 
         // Using generic interpolation method
-        double page = NSupport.interpolate(item, items, (theItem) -> theItem.pageQuestion);
+        double page = NSupport.interpolate(item, items, theItem -> theItem.pageQuestion);
         return (double) Math.round(page*100)/100;
     }
 
@@ -66,7 +66,7 @@ public class ItemBank {
     public double interpolatePageAnswer(Item item) {
 
         // Using generic interpolation method
-        double page = NSupport.interpolate(item, items, (theItem) -> theItem.pageAnswer);
+        double page = NSupport.interpolate(item, items, theItem -> theItem.pageAnswer);
         return (double) Math.round(page*100)/100;
     }
 
