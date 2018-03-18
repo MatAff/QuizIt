@@ -6,7 +6,7 @@ import java.util.*;
 
 public class NSupport {
 
-    // Create integer from string exception returns null
+    // Create Integer from String exception returns null
     public static Integer createInteger(String s) {
     
         Integer i;
@@ -23,8 +23,8 @@ public class NSupport {
     // Interpolate 
     public static double interpolate(int currentIndex, int startIndex, double startVal,
                                       int endIndex, double endVal) {
-        System.out.println(currentIndex + " " + startIndex + " " + startVal + 
-                           " " + endIndex + " " +  endVal);
+        //System.out.println(currentIndex + " " + startIndex + " " + startVal + 
+                           //" " + endIndex + " " +  endVal);
         return startVal + (endVal - startVal) * (currentIndex - startIndex) / (endIndex - startIndex);
     }
 

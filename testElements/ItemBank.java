@@ -57,39 +57,17 @@ public class ItemBank {
     // Interpolation of page question number
     public double interpolatePageQuestion(Item item) {
 
-        // Test generic interpolation method
-        System.out.println(NSupport.interpolate(item, items, (theItem) -> theItem.pageQuestion));
+        // Using generic interpolation method
+        double page = NSupport.interpolate(item, items, (theItem) -> theItem.pageQuestion);
+        return (double) Math.round(page*100)/100;
+    }
 
-        if (item.pageQuestion!=null) {
-            return item.pageQuestion;
-        } else {
- 
-            int startIndex = -999;
-            int startPage = -999;
-            int endIndex = -999;
-            int endPage = -999;
+    // Interpolation of page answer number
+    public double interpolatePageAnswer(Item item) {
 
-            int ind = items.indexOf(item);
-
-            Function<Item, Integer> func = theItem -> theItem.pageQuestion;
-            for(int s = ind; s >= 0; s--) {
-                Integer val = func.apply(items.get(s));
-                //if(items.get(s).pageQuestion!=null) {
-                if(val!=null) {
-                    startIndex = s;
-                    startPage = val; //items.get(s).pageQuestion;
-                    break;
-                }
-            }
-            for(int e = ind; e < items.size(); e++) {
-                if(items.get(e).pageQuestion!=null) {
-                    endIndex = e;
-                    endPage = items.get(e).pageQuestion;
-                    break;
-                }
-            }
-            return NSupport.interpolate(ind, startIndex, startPage, endIndex, endPage);
-        }
+        // Using generic interpolation method
+        double page = NSupport.interpolate(item, items, (theItem) -> theItem.pageAnswer);
+        return (double) Math.round(page*100)/100;
     }
 
 } 

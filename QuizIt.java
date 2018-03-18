@@ -48,6 +48,7 @@ public class QuizIt {
             Item item = ib.chapterItem(chapters);
             System.out.println(item);
             System.out.println(ib.interpolatePageQuestion(item));
+            System.out.println(ib.interpolatePageAnswer(item));
 
             // Read something
             if (console != null) { userInput = console.readLine(); }
