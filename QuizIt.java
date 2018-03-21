@@ -39,7 +39,8 @@ public class QuizIt {
             
             // Compute overview
             Map<Integer, Double> propMap = pm.getChapPerform(rb);
-            List<Integer> probChaps = pm.getChapBelow(0.6, chapters, true); // true > prints
+            System.out.println("Overall: " + pm.avgChapters(chapters));
+            List<Integer> probChaps = pm.getChapBelow(0.70, chapters, true); // true > prints
             System.out.println("");
 
             // Select item

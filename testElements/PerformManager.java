@@ -38,6 +38,15 @@ public class PerformManager {
         return propMap;
 
     }
+ 
+    // Get average across selected chapters
+    public double avgChapters(List<Integer> chapters) {
+        List<Double> vals = new ArrayList<>();
+        for(Integer c : chapters) {
+            vals.add(propMap.get(c));
+        }
+        return vals.stream().mapToDouble(d -> d).average().getAsDouble();
+    }
 
     // Get chapter below thresshold
     public List<Integer> getChapBelow(double th, List<Integer> chapters, boolean print) {
