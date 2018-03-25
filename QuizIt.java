@@ -28,7 +28,8 @@ public class QuizIt {
         PerformManager pm = new PerformManager();
 
         // Select chapter
-        List<Integer> chapters = Arrays.asList(12,13,14,15,16,17,18,19,20,21,22);
+        //List<Integer> chapters = Arrays.asList(12,13,14,15,16,17,18,19,20,21,22);
+        List<Integer> chapters = Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
 
         // Initialize console
         Console console = System.console(); // Created using singleton pattern
@@ -40,7 +41,7 @@ public class QuizIt {
             // Compute overview
             Map<Integer, Double> propMap = pm.getChapPerform(rb);
             System.out.println("Overall: " + pm.avgChapters(chapters));
-            List<Integer> probChaps = pm.getChapBelow(0.70, chapters, true); // true > prints
+            List<Integer> probChaps = pm.getChapBelow(0.80, chapters, true); // true > prints
             System.out.println("");
 
             // Select item
