@@ -47,6 +47,8 @@ public class QuizIt {
 
        }
 
+       // Save responses
+       s.saveResponses();
         
     } 
 

@@ -82,4 +82,14 @@ public class Item {
         return s;
     }
 
+    // Get question
+    public String getQuestion() {
+        return question;
+    }
+
+    // Get answer
+    public String getAnswer() {
+        return answer.replace("NEWLINE","\n");
+    }
+
 } 

@@ -63,9 +63,10 @@ public class SummaryToContent {
                          a.add(l.get(i + aNr + 1));
                      }
                      String answer = String.join("NEWLINE", a);
-                     answer.replace(",","");
+                     answer = answer.replace(",","");
 
                      // Create list and add
+                     line = line.replace(",","");
                      List<String> itemContent = Arrays.asList(Integer.toString(++itemNr),line,answer);
                      content.add(itemContent);
 

@@ -11,9 +11,8 @@ public class SelectorManager {
 
         Selector s = null;
 
-        if (method.equals("chapter")) {
-            s = new ChapterSelector(loc, settings);
-        }
+        if (method.equals("chapter")) { s = new ChapterSelector(loc, settings); }
+        if (method.equals("item")) { s = new ItemSelector(loc, settings); }
 
         return s;
     }

@@ -44,6 +44,9 @@ public class Response {
         List<String> l = new ArrayList<>();
         for(String s : header) {
             switch(s.toLowerCase()) {
+                case "itemnr":
+                    l.add(itemNr.toString());
+                    break;
                 case "fullref":
                     l.add(fullRef);
                     break;
