@@ -4,7 +4,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.stream.*;
 import java.text.*;
-import fileSupport.*;
+import support.*;
 
 public class SummaryToContent {
 
@@ -85,7 +85,7 @@ public class SummaryToContent {
         System.out.println(content);
 
         // Write to CSV
-        CSVtoList.writeContent(args[0] + "/items.csv",content);
+        CSV.writeContent(args[0] + "/items.csv",content);
 
     } 
 

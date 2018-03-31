@@ -1,7 +1,7 @@
 
-package printSupport;
+package support;
 
-public class PSupport {
+public class PrintSupport {
 
     public static final String ANS4x_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";

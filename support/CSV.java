@@ -1,11 +1,11 @@
 
-package fileSupport;
+package support;
 
 import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 
-public class CSVtoList {
+public class CSV {
 
     // Method to write content to file
     public static void writeContent(String fileName, List<List<String>> content) {
@@ -29,7 +29,6 @@ public class CSVtoList {
 
         // Create file
         File f = new File(fileName);
-        //System.out.println(f.getAbsolutePath()); // Debug
 
         // Create list
         List<List<String>> lines = new ArrayList<>();
@@ -66,4 +65,3 @@ public class CSVtoList {
     } 
 
 } 
-

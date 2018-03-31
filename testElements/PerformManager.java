@@ -1,9 +1,9 @@
 
 package testElements;
 
+import support.*;
 import java.util.*;
 import java.util.stream.*;
-import printSupport.*;
 
 public class PerformManager {
 
@@ -54,9 +54,9 @@ public class PerformManager {
         for(Integer c : chapters) {
             if (propMap.get(c) < th) {
                 problemChap.add(c);
-                PSupport.printColor(c + " " + propMap.get(c),"red");
+                PrintSupport.printColor(c + " " + propMap.get(c),"red");
             } else {
-                PSupport.printColor(c + " " + propMap.get(c),"green");
+                PrintSupport.printColor(c + " " + propMap.get(c),"green");
             }
         }
         return problemChap;

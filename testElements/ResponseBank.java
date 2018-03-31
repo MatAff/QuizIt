@@ -1,8 +1,8 @@
 
 package testElements;
 
+import support.*;
 import java.util.*;
-import fileSupport.*;
 import java.util.stream.*;
 
 public class ResponseBank {
@@ -20,7 +20,7 @@ public class ResponseBank {
         responses = new ArrayList<>();
 
         // Load file
-        List<List<String>> content = CSVtoList.getContent(fileName);
+        List<List<String>> content = CSV.getContent(fileName);
 
         // Add responses to list
         header = content.get(0);
@@ -42,7 +42,7 @@ public class ResponseBank {
 
         // Convert response bank to list (for saving as csv)
         List<List<String>> l = this.toList();
-        CSVtoList.writeContent(fileName, l);
+        CSV.writeContent(fileName, l);
     }
 
     // Method to print itembank

@@ -2,7 +2,7 @@
 package testElements;
 
 import java.util.*;
-import numberSupport.*;
+import support.*;
 
 public class Item {
 
@@ -44,7 +44,7 @@ public class Item {
                  return true;
              case "pagequestion":
                  //this.pageQuestion = Integer.valueOf(value);
-                 this.pageQuestion = NSupport.createInteger(value);
+                 this.pageQuestion = NumberSupport.createInteger(value);
                  return true;
              case "pageanswer":
                  this.pageAnswer =  Integer.valueOf(value);

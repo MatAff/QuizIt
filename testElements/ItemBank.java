@@ -1,10 +1,9 @@
 
 package testElements;
 
+import support.*;
 import java.util.*;
-import fileSupport.*;
 import java.util.stream.*;
-import numberSupport.*;
 import java.util.function.*;
 
 public class ItemBank {
@@ -15,10 +14,7 @@ public class ItemBank {
     public ItemBank(String fileName) {
     
         // Load file content
-        List<List<String>> content = CSVtoList.getContent(fileName);
-
-        // Debug - Print content
-        //CSVtoList.printContent(content, 10);
+        List<List<String>> content = CSV.getContent(fileName);
 
         // Initialize list
         items = new ArrayList<>();
@@ -58,7 +54,7 @@ public class ItemBank {
     public double interpolatePageQuestion(Item item) {
 
         // Using generic interpolation method
-        double page = NSupport.interpolate(item, items, theItem -> theItem.pageQuestion);
+        double page = NumberSupport.interpolate(item, items, theItem -> theItem.pageQuestion);
         return (double) Math.round(page*100)/100;
     }
 
@@ -66,7 +62,7 @@ public class ItemBank {
     public double interpolatePageAnswer(Item item) {
 
         // Using generic interpolation method
-        double page = NSupport.interpolate(item, items, theItem -> theItem.pageAnswer);
+        double page = NumberSupport.interpolate(item, items, theItem -> theItem.pageAnswer);
         return (double) Math.round(page*100)/100;
     }
 

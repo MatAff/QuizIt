@@ -1,10 +1,10 @@
 
-package numberSupport;
+package support;
 
 import java.util.function.*;
 import java.util.*;
 
-public class NSupport {
+public class NumberSupport {
 
     // Create Integer from String exception returns null
     public static Integer createInteger(String s) {
