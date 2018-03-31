@@ -57,23 +57,18 @@ public class SummaryToContent {
                  int nrLines = getAnswerNumber(line);
                  if (nrLines > 0) {
      
-                     // Item
-                     System.out.println(line);
- 
                      // Answer
                      List<String> a = new ArrayList<>();
                      for(int aNr = 0; aNr < nrLines; aNr++) {
                          a.add(l.get(i + aNr + 1));
                      }
-                     String answer = String.join("\n", a);
+                     String answer = String.join("NEWLINE", a);
+                     answer.replace(",","");
 
                      // Create list and add
-                     List<String> itemContent = Arrays.asList("1",line,answer);
+                     List<String> itemContent = Arrays.asList(Integer.toString(++itemNr),line,answer);
                      content.add(itemContent);
 
-                     // Print
-                     System.out.println(answer);
-     
                  }
             }
 
@@ -82,7 +77,7 @@ public class SummaryToContent {
         }
 
         // Print content
-        System.out.println(content);
+        //System.out.println(content);
 
         // Write to CSV
         CSV.writeContent(args[0] + "/items.csv",content);

@@ -6,6 +6,7 @@ import java.time.*;
 
 public class Response {
 
+    Integer itemNr;
     String fullRef;
     LocalDateTime dateTime;
     Boolean correct;
@@ -22,6 +23,9 @@ public class Response {
     public Response(List<String> header, Item item, Boolean correct) {
         for(String s : header) {
              switch(s.toLowerCase()) {
+                 case "itemnr":
+                     this.itemNr = item.itemNr;
+                     break;
                  case "fullref":
                      this.fullRef = item.fullRef;
                      break;
@@ -62,6 +66,9 @@ public class Response {
     // Set something
     public boolean setValue(String type, String value) {
          switch(type.toLowerCase()) {
+             case "itemnr":
+                 this.itemNr = Integer.valueOf(value);
+                 return true;
              case "fullref":
                  this.fullRef = value;
                  return true;
@@ -83,6 +90,7 @@ public class Response {
     @Override
     public String toString() {
         String s = "";
+        if (itemNr!=null) { s = s + itemNr + "; "; }
         if (fullRef!=null) { s = s + fullRef + "; "; }
         if (correct!=null) { s = s + correct + "; "; }
         if (chapter!=null) { s = s + chapter + "; "; }

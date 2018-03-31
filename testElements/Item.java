@@ -7,6 +7,9 @@ import support.*;
 public class Item {
 
     // Members
+    Integer itemNr;
+    String question;
+    String answer;
     String book;
     Integer chapter;
     Integer chapterItemNr;
@@ -30,6 +33,15 @@ public class Item {
     public boolean setValue(String type, String value) {
     
          switch(type.toLowerCase()) {
+             case "itemnr":
+                 this.itemNr = Integer.valueOf(value);
+                 break;
+             case "question":
+                 this.question = value;
+                 break;
+             case "answer":
+                 this.answer = value;
+                 break;
              case "book":
                  this.book = value;
                  return true;
@@ -58,6 +70,9 @@ public class Item {
     @Override
     public String toString() {
         String s = "";
+        if (itemNr!=null) { s = s + itemNr + "; "; }
+        if (question!=null) { s = s + question + "; "; }
+        if (answer!=null) { s = s + answer + "; "; }
         if (book!=null) { s = s + book + "; "; }
         if (chapter!=null) { s = s + chapter + "; "; }
         if (chapterItemNr!=null) { s = s + chapterItemNr + "; "; }
