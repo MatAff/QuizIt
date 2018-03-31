@@ -1,0 +1,288 @@
+ItemNr,Question,Answer
+1,Instanceof [4],myObject instanceof Class
+Comparing unrelated classes does not compile
+Compare to null returns false
+Instance can be compared to all interfaces as a subclass could implement
+1,Equals [2 notes],Reflexive (a to a > true); Symmetric(a to b = b to a); Transitive (if a to b & b to c then a to c); Consistent (a to b = a to b) 
+Comparison to null >> false
+1,Equals steps [4],Input Object obj; 
+Check instance of; (Can also be used to compare arrays)
+Cast and compare
+Return primitive boolean
+1,hashCode [3 notes],Use ‘fixed’ variables. E.g. don't use weight which could change
+When equals is true, hashcode should be same
+obj.hashCode();
+1,Other [2 notes],Virtual method invocation - Implementation depends on class
+Annotation - @Override - indicates a method is being overwritten 
+1,Enum methods [4],s.name () // Returns value
+s.ordinal () // Returns position as int
+Season.valueOf("Summer"); // Returns Enum constant
+Season.values() // Returns array of values
+1,Enum notes [3],enum Season { WINTER, SUMMER }; Upper case is convention
+Semicolon compulsory when more than values are listed
+Try to keep enums simple
+1,Enum usage [7],Do not extend
+Do not compare to int; 
+Can use in switch, but use SUMMER, not Season.SUMMER!
+Can be private
+Can not be members, but not local
+Can be printed directly // Prints SUMMER, not Season.SUMMER
+Boolean.False // Works, is a thing..
+1,Enum advanced [2],Can add state SUMMER (“warm”) also add field and private or default (!) constructor (not protected or public). Field may be public!
+Or assign method to each value and use overall abstract or default method. e,g WINTER { public void doSometh() { ..} }, SUM...
+1,Member inner classes [6],Can be public, private, protected or default
+Can be abstract or final
+Cannot declare static members
+Compiling creates two .class files e.g. Outer.class & Outer$Inner.class
+Have access to all members of enclosing class using Outer.this.member, or Level1.Level2.this.m or Level2.this.m
+Instantiated using new Outer.new Inner(); or outer.new Inner(); // Can't be instantiated directly from static (!) main method!
+1,Local inner classes - Declared in method [5],Same as member inner except: 
+No access specifier (as already local to the method). Cannot be static
+Only have access to local variables if effectively final (value only set once, see p. 29)
+Can be instantiated within method using new Inner (without object of outer class)
+Can be instantiated within method object of outer class
+1,Anonymous inner class [5],Does not get name, just body
+Extends existing class or implements interface 
+abstract class MyAbs{ abstract void doSometh(); } // The abstract class without method implementation
+MyAbs anno = new MyAbs() { void doSometh() { [implementation] } }; // Create anonymous class with implementation
+Ends in semicolon! Watch out for this! 
+1,Static nested classes [6],Can be instantiated without objects of enclosing class
+Cannot access members of enclosing class without explicit object
+Can be private, etc
+Static nested classes can be imported using either import static or normal import
+import static bird.Toucan.Beak;
+Can be extended by concrete (non-static) member/inner classes.
+1,Functional interface - @FunctionalInterface [2],Contains exactly one abstract method, which it may contain through inheritance
+May contain other static/default methods
+1,Lambda Rules [4],If more than one variable parentheses are required
+If input variables are declared all must be declared and parentheses are required
+When return key word is used {} are required
+Variables must be initialized if used (don't get default values)
+1,Polymorphism [5],The reference determines which properties are available
+The object determines the behavior
+Methods always call the instance variables available in the object // !!!
+Static methods behave depending on reference
+Variables behave like static methods
+1,Design pattern: Singleton [3 important pieces],Single shareable instance; Used by multiple instances; Faster data loading
+Private constructor - private SingletonName() {}
+Private static final member/instance - private static final SingletonName instance = new SingletonName();
+1,Design pattern: Singleton with Lazy instantiation [3 points],Check is instance==null in get Instance
+instance is not final
+Is not thread safe unless marked as synchronized
+1,Design pattern: Creating Immutable objects [5],Use constructors to set all properties
+No setters
+Mark instance variables private and final
+Don't allow access to mutable objects (return copies instead, or use Collections.unmodifiableList())
+Prevent overwriting of methods ((mark class OR methods final) OR mark the constructor private and use a factory pattern)
+1,Generic Methods [4],Useful for static methods, where the generic isn't determined by the class
+public static <T> void methodName(T t) ()
+public static <T> T methodName(T t) ( return t; ) // Extra T required as method returns something
+Can be called using: ClassName.<String>methodName(s); // Complicated but valid, <> not required
+1,Bounds - Allows methods to accept lists of limited types [3 types, 1 note],List<?> list = ..
+Upper bound: <? extends Number>; Number of anything that extends Number
+Lower bound: <? super String>; String or super classes of // This is the only one you can add element to directly!
+1,Collections [4, 2 notes],List: ordered collection; May contain duplicates; Access by index
+Set: No duplicate entries
+Queue: Has order; Typically first in-first out, other orderings possible
+Map: Keys to values, no duplicate keys
+1,Common methods [6],boolean add(E element); 
+boolean contains(Object object); 
+boolean remove(Object object);
+int size(); 
+void clear(); 
+boolean isEmpty(); 
+1,List [3 types, 7 methods],ArrayList; LinkedList; Vector
+Adding, getting, setting, removing [5]
+void add(E element); 
+1,Adding, getting, setting, removing [5],void add(E element); 
+void add(int index, E element); 
+E get(int index); 
+E set(int index, E e)	// Replaces and return original
+void remove(int index); // Different from common method, this takes primitive!
+1,Index [2],int indexOf(Object o); // Find first; -1 if not found
+int lastIndex(Object o); // Find last; -1 if not found
+1,Old List Looping Method [3],Iterator iter = list.iterator(); while(iter.hasNext()) { String string = (String) iter.next(); } // hasNext >> next
+
+
+1,Set - No duplicates [2],HashSet - Uses HashCode to quickly retrieve - No sorting
+TreeSet - Has order - Sorts - Needs to implement Comparable
+1,Queue [3 types, 8 methods],ArrayDeque; LinkedList; Stack;
+FIFO (most common); ArrayDeque: offer > peek > poll
+LIFO; Stack: push > peek > pop
+1,Adding [3],boolean add(E e); // Adds element to the back, returns true or throws exception
+boolean offer(E e); // Adds element to the back, returns true/false [ArrayDeque]
+void push(E e); // Adds element to start, makes it a double ended queue
+1,Peeking [2],E peek(); Returns next element or null if empty [ArrayDeque, Stack]
+E element(); // Returns next element, throws exception if queue is empty
+1,Removing [3],E poll(); Removes and returns next element or null if empty [ArrayDeque]
+E remove(): Remove and returns next element or throws exception
+E pop(); // Removes and returns next element, throws exception if empty
+1,Stack [3],void push(E e); // Adds element to the front of the queue. This makes it a double ended queue [ArrayDeque, Strack]
+E pop(); // Removes and returns next element, throws exception if empty
+E peek(); Returns next element or null if empty [ArrayDeque, Stack]
+1,Putting, getting and removing [3],V put(K key, V value) // Adds or replaces key/value pair. Returns previous value or null. Adding the same key overwrite, does not throw an Exception!
+V get(Object key) // Returns values based on key
+V remove(Object key) // Returns null if not found
+1,Common methods [3],int size(); boolean isEmpty(); void clear() // Removes all keys and values
+Contains [2]
+boolean containsKey(Object key); boolean containsValue(Object); // There is no .contains() method
+1,Contains [2],boolean containsKey(Object key); boolean containsValue(Object); // There is no .contains() method
+Keys and values [2]
+1,Keys and values [2],Set<K> keySet() // Returns keys e.g. map.keySet();
+Collection<V> values() // Returns values e.g. map.values();
+1,Searching and Sorting [2],Collections.sort(myElements) expects elements to implement Comparable other fails to compile
+Can be sorted by also passing a Comparator to Collections.sort(ducks, byWeight)
+1,Collection methods/iterators? [6],list.removeIf(s -> s.startsWith("A"));
+list.replaceAll(x -> x*2);
+list.forEach(System.out::println); // Only takes Consumer<>, no variations!
+map.merge(someKey, someAltValue, BiFunction); [3]
+Key already in map: Result of function
+Key not in map: Value added
+1,map.merge(someKey, someAltValue, BiFunction); [3],Key already in map: Result of function
+Key not in map: Value added
+Function returns null for existing value: Remove
+1,Optional - Creating [3],Optional.empty();
+Optional.of(...); // Create optionals, cannot use null
+Optional.ofNullable(...); // Can handle null
+1,Optional - Reading [6],opt.get(); // Throws NoSuchElementException (logical)
+boolean opt.isPresent(); 
+opt.ifPresent(Consumer c); 
+opt.orElse(T other); // Returns other value if none present
+opt.orElseGet(Supplier S); // Runs supplier and returns other value if none present e.g. opt.orElseGet(() -> Math.random()));
+opt.orElseThrow(Supplier S) // Throws specified exception if no value e.g. opt.orElseThrow(() -> new RuntimeException()));
+1,Cr;eate Streams [6 ways],Stream<String> empty = Stream.empty(); Stream.of(1, 2, 3); // From data
+Stream<String> fromList = list.stream(); list.parallelStream(); // From list (sorting does not affect original list)
+Don't do this on a Map
+Stream<Double> randoms = Stream.generate(Math::random); // Random numbers
+Stream<Integer> oddNumbers = Stream.iterate(1, n -> n + 2); // Based on previous value
+Intermediate Operations [8]
+1,Intermediate Operations [8],.filter(predicate)
+.distinct()  // Removes duplicates, using equals
+.limit(int) // .skip(int)
+.map()  // Uses Function, or UnaryOperator
+.flatMap() // Always produces a non-parallel stream, requires lamba, (to convert to stream)
+.sorted() // Note Comparator.reverseOrder(), not Comparator::reverseOrder
+.peek() // Doesn't change stream
+Terminal Operations [3-2-3-1-3-1 = 13]
+1,Terminal Operations [3-2-3-1-3-1 = 13],long count(); Optional<T> min(); Optional<T> max(); // Reductions; Returns Optionals! min, max need Comparator arg
+These is no sum(); // Only exists for primitive streams
+findAny(); findFirst(); // Returns Optional<T>, these are not reductions, they don't take arguments. Returns Optionals!
+1,Printing a stream [3],s.limit(5).forEach(System.out::println); // Print using forEach
+s.peek(System.out::println).count(); // Print using peek, remember to add a terminal operation
+System.out.println(s.collect(Collectors.toList())); // Convert to list and print
+1,Primitive Streams [3 types, 4 methods],IntStream; LongStream; DoubleStream; // Watch spelling
+IntStream.range(1,6); IntStream.rangeClosed(1,5);
+DoubleStream.generate(Math::random); DoubleStream.iterate(0.5, d -> d / 2);
+1,Functional interfaces for double, int, long [3x6],Double/Int/Long  Supplier/Consumer/Predicate/Function<R>/UnaryOperator/BinaryOperator 
+Return generic is specified for Function, and only for Function!
+methods often renamed to reflect type (not for Consumer, Predicate, Function)
+1,Conversion Interfaces To and Between Primitive Streams [3x2,3;3x3,3;4x1],ToDouble/ToInt/ToLong Function<T>/BiFunction<T,U> // applyAs Double/IntLong
+Double/Int/Long To Double/Int/Long Function // applyAs Double/IntLong
+Obj Double/Int/LongConsumer<T> // Accept, note generic parameter // Takes Object and primitive
+1,Classes [4 types],LocalDate 
+LocalTime 
+LocalDateTime
+ZonedDateTime 
+1,Create [6],LocalTime.now() method creates instance
+LocalDate.of(2015, Month.JANUARY, 31)
+ZondedDateTime.of(2015,1,20,6,15,30,200,zone);
+ZondedDateTime.of(localDate, localTime, zone); // Better
+ZoneId zone = ZoneId.of(“US/Eastern”);
+ZoneId.systemDefault();
+1,To Epoch [2],long LocalDate.toEpochDay()
+long Local/ZonedDateTime.toEpochSecond()
+1,Instants [2 methods],Specific moment in time based on GMT
+Instant.now()
+1,Manipulating Dates and Times [2x8+2, 2 notes],.plus/minusYears, Months, Weeks, Days, Hours, Minutes, Seconds, Nanos
+.plus/minus(period); 
+1,Periods (Not for time) [5, 2 notes],Period.ofYears(); .ofMonths(); ofWeeks(); ofDays(); of(year, month, day);
+Don't string together, only last one will apply
+P1Y2M3D or P21D // when printing
+
+Duration (for time (and days)) [7 methods, 4 notes]
+1,Duration (for time (and days)) [7 methods, 4 notes],Duration.ofDays(); .ofHours(); .ofMinutes(); .ofSeconds(); .ofMillis(); .ofNanos(); 
+Duration.of(1, ChonosUnit.Days); ChonosUnit.HOURS; .MINUTES; .SECONDS; .MILLIS; .NANOS;
+Only one unit at a time, don't string together, only last one will apply
+PT1H, PT10S // Example of when printing
+
+Comparing [3]
+book .isBefore(other)/isAfter(other); // e.g. a.isBefore(b); // Date and time
+1,Comparing [3],book .isBefore(other)/isAfter(other); // e.g. a.isBefore(b); // Date and time
+public long until(Temporal endExclusive,  TemporalUnit unit) //  e.g. date1.until(date2, ChronoUnit.DAYS)); // Days between 1 & 2
+ChronosUnit.MINUTES.between(timeOne, timetwo); // Minutes between...
+1,Get date elements [4],.getDayOfWeek(); MONDAY // Returns Enum
+.getMonth(); JANUARY // Returns Enum
+.getYear(); 2020  
+.getDayOfYear(); 20
+1,Notes [2],If catch and finally both throw an exception the one from the finally get through
+Rethrowing Exception: When you write Exception e in the catch statement, java assumes catch the exception that the method throws
+1,Create exceptions [2],Extend Exception or RuntimeException
+Constructors (No argument, Exception e, String message)
+1,Multi catch [3],Use | but only one e
+Meant to catch unrelated exceptions 
+Do not reassign a new exception to e // As compiler doesn't know which one it's going to be
+1,Try with resources [7],try (MyClass c = new MyClass()) { c.doSometh(); } 
+Resources are closest in reverse order after the try statements ends, after which catch and finally are run!
+Implements AutoCloseable (there's also a thing called Closeable, which also works)
+Implement close() method
+Recommended that close throws specific or no exceptions
+If close is able to throw an exception, a catch statement is required 
+Closable only allow to throw IOException
+1,Suppressed Exception [2],Multiple exceptions, only the first is 'active' the rest are suppressed
+for (Throwable t : e.getSuppressed()) { t.getMessage(); }
+1,Assertion - When you expect a boolean expression to be true [3 forms],assert i > 0; 
+assert(I>0); 
+assert i > 0: "OhNo!" // Look for colon! Any value or Supplier
+1,Files reading writing [4],Files.newBufferedReader(p); 
+Files.newBufferedWriter(p); // Use try with resources, catch IOExp for reader/writer methods
+Files.readAllLines(p); // IOExcept list<String>  // Not a stream, memory intensive // IOExcept
+Files.lines(p); // IOExcept Stream<String> // Better than readAllLines(); Creates Stream<String> loads one bit at a time // IOExcept
+1,File Attributes (specific to NIO.2) [9 methods],Files.isDirectory(); // Has to exist, can refer to symbolic link
+Files.isRegularFile(); 
+Files.isSymbolicLink();
+Files.isHidden(); // Catch IOException e
+Files.size(); // Instead of .length(); !!
+Files.getLastModifiedTime(); 
+Files.setLastModifiedTime();
+Files.getOwner(); 
+Files.setOwner();
+1,Walking and Searching using Files [3 methods],Java, lazy, depth first. Avoid circular paths, throws FileSystemLoopException
+Stream<Path> Files.walk(path). May throw error when missing access permission. NOFOLLOW_LINKS is default
+Also goes through subdirectories
+1,Views [4 methods],Faster for multiple attributes; Fewer trips; Adapts to file system
+View creation
+BasicFileAttributes data = Files.readAttributes(path, BasicFileAttributes.class); // Cannot modify, watch for questions!
+BasicFileAttributeView.class // Can also alter
+1,View access [4],data.isOther(); 
+data.lastAccessTime(); 
+data.creationTime(); 
+data.fileKey();
+1,Connection [3],conn.setAutoCommit(boolean)
+conn.commit(); // Commits all previous 
+conn.rollback(); // Cancels all(!)previous statements
+1,Statement [4 methods],e.g. Statement stmt = conn.createStatement(ResultSet.YPE_SCROLL_INSENSITIVE, ResultSet.CONCU_READ_ONLY);
+bool b = stmt.execute() // Can alter; Cannot return data; Boolean; true for select; false for alteration
+ResultSet rs = stmt.executeQuery() // Cannot alter: Can return ResultSet (Running another query closes first rs!)
+stmt.executeUpdate() // Can alter; Return nr (int) rows changed
+1,Reading ResultSet [9 methods],while(rs.next()) { int id = rs.getInt(“id”); }
+.getBoolean(); .getInt(...); .getDouble(); .getLong(); // Int not spelled in full
+.getString(...); .getObject();
+.getData(); .getTime(); .getTimeStamp(); // java.sql.Date/Time/TimeStamp
+Argument is column label or number; Numbers start at 1 not 0;
+SQL Date Conversion [2]
+java.sql.Date sqlDate = rs.getDate(1);
+LocalDate localDate = sqlDate.toLocalDate(); // This is a method not a factory
+JDBC Date and Time [3]
+1,SQL Date Conversion [2],java.sql.Date sqlDate = rs.getDate(1);
+LocalDate localDate = sqlDate.toLocalDate(); // This is a method not a factory
+1,JDBC Date and Time [3],java.sql.Date - java.time.LocalDate - Date only
+java.sql.Time - java.time.LocalTime - Time only
+java.sql.TimeStamp - java.time.LocalDateTime - Date and Time
+1,Scrolling ResultSet [8 methods],void afterLast(); void beforeFirst(); // Surprisingly these return void. Watch for questions on this!
+boolean first(); boolean last(); boolean next(); boolean previous() // Spelling in full!
+boolean absolute(int rowNum); boolean relative(int rowNum); // Negative numbers start from end. absolute(0) = false;
+Closing Database Resources
+Try (Connection conn = DriverManager.getConnection(url);	….);
+The ‘old’ way uses a finally block and lots of checks to see what still is open. 
+Exceptions
+catch(SQLException e) { e.getMessage(); e.getSQLState(); e.getErrorCode(); }

@@ -17,8 +17,8 @@ public class QuizIt {
     public static void main(String[] args) {
 
         // Set file names
-        String ibFileName = "items.csv";
-        String rbFileName = "responses.csv";
+        String ibFileName = args[0] + "/items.csv";
+        String rbFileName = args[0] + "/responses.csv";
 
         // Load itembank and responsebank
         ItemBank ib = new ItemBank(ibFileName);
