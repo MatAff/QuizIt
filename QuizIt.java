@@ -1,5 +1,6 @@
 
 import testElements.*;
+import selector.*;
 import java.util.*;
 import java.io.Console;
 
@@ -15,21 +16,16 @@ import java.io.Console;
 public class QuizIt {
 
     public static void main(String[] args) {
+ 
+        // Check argument has been entered
+        // TODO
 
-        // Set file names
-        String ibFileName = args[0] + "/items.csv";
-        String rbFileName = args[0] + "/responses.csv";
+        // Get settings
+        ResourceBundle settings = ResourceBundle.getBundle(args[0] + "/settings");
+        System.out.println(settings.getString("method"));
 
-        // Load itembank and responsebank
-        ItemBank ib = new ItemBank(ibFileName);
-        ResponseBank rb = new ResponseBank(rbFileName);
-
-        // Initialize PerformanceManager
-        PerformManager pm = new PerformManager();
-
-        // Select chapter
-        //List<Integer> chapters = Arrays.asList(12,13,14,15,16,17,18,19,20,21,22);
-        List<Integer> chapters = Arrays.asList(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
+        // Get Selector
+        Selector s = SelectorManager.get(args[0], settings);
 
         // Initialize console
         Console console = System.console(); // Created using singleton pattern
@@ -38,30 +34,19 @@ public class QuizIt {
         // Loop
         for(int i = 0; i < 5; i++) {
             
-            // Compute overview
-            Map<Integer, Double> propMap = pm.getChapPerform(rb);
-            System.out.println("Overall: " + pm.avgChapters(chapters));
-            List<Integer> probChaps = pm.getChapBelow(0.80, chapters, true); // true > prints
-            System.out.println("");
+            // Check performance and pick new item
+            s.checkPerformance();
+            s.pickItem();
 
-            // Select item
-            Item item = ib.chapterItem(probChaps);
-            System.out.println(item);
-            System.out.println("Page number " + ib.interpolatePageQuestion(item));
-            System.out.println("Page number answer " + ib.interpolatePageAnswer(item));
-
-            // Read something
+            // Read answer
             if (console != null) { userInput = console.readLine(); }
             System.out.println(userInput);
 
             // Process response
-            Boolean correct = userInput.equals("1");
-            rb.add(item, correct);
-            
-        }
+            s.checkAnswer(userInput);
 
-        // Save responses
-        rb.save();
+       }
+
         
     } 
 
