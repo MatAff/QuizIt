@@ -75,21 +75,23 @@ public class ResponseBank {
     // Proportion correct item
     public double propCorrectItem(Integer itemNr, int n) {
         List<Response> subRes = responses.stream().
-                               filter(r -> r.itemNr==itemNr).
+                               filter(r -> r.itemNr.equals(itemNr)).
                                collect(Collectors.toList());
-        long nrCorrect = subRes.stream().limit(n).filter(r -> r.correct).count();
-        return nrCorrect / subRes.size();
+        long nrCorrect = subRes.stream().
+            skip(Math.max(subRes.size() - n,0)).
+            limit(n).filter(r -> r.correct).count();
+        return ((double) nrCorrect) / Math.min(subRes.size(), n);
     }
 
     public long count(Integer itemNr) {
-        return responses.stream().filter(r -> r.itemNr == itemNr).count();
+        return responses.stream().filter(r -> r.itemNr.equals(itemNr)).count();
     }
 
     // Compute proportion correct by chapter
     public double propCorrectChapter(int nr, int chapter) {
         List<Response> subRes = responses
             .stream()
-            .filter(r -> r.chapter==chapter)
+            .filter(r -> r.chapter.equals(chapter))
             .collect(Collectors.toList());
         Map<Boolean, List<Response>> p = subRes.stream()
             .skip(Math.max(subRes.size() - nr,0))

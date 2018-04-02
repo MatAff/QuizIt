@@ -44,11 +44,12 @@ public class ItemBank {
         return items.get(itemNr);
     }
 
+    // Method to select random item from a list of itemNrs
     public Item randomItem(List<Integer> itemNrs) {
         int nr = (int) (Math.random() * itemNrs.size());
         Integer itemNr = itemNrs.get(nr);
         System.out.println(itemNr);
-        return items.stream().filter(i -> i.itemNr==itemNr).findFirst().get();
+        return items.stream().filter(i -> i.itemNr.equals(itemNr)).findFirst().get();
     }
 
     // Get all item numbers
