@@ -30,6 +30,9 @@ public class ItemBank {
         //this.printItemBank(10); 
     }
   
+    public void printItemBank() {
+        this.printItemBank(items.size());
+    }
     // Method to print itembank
     public void printItemBank(int maxNr) {
         items.stream().limit(maxNr).forEach(System.out::println);
@@ -39,6 +42,20 @@ public class ItemBank {
     public Item randomItem() {
         int itemNr = (int) (Math.random() * items.size());
         return items.get(itemNr);
+    }
+
+    public Item randomItem(List<Integer> itemNrs) {
+        int nr = (int) (Math.random() * itemNrs.size());
+        Integer itemNr = itemNrs.get(nr);
+        System.out.println(itemNr);
+        return items.stream().filter(i -> i.itemNr==itemNr).findFirst().get();
+    }
+
+    // Get all item numbers
+    public List<Integer> getAllItemNrs() {
+        return items.stream().
+               map(i -> i.itemNr).
+               collect(Collectors.toList());
     }
 
     // Select from chapter

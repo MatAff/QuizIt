@@ -64,6 +64,27 @@ public class ResponseBank {
         return nrCorrect / (double) nr;
     }
 
+    // Active items
+    public List<Integer> getActiveItems() {
+        return responses.stream().
+               map(r -> r.itemNr).
+               distinct().
+               collect(Collectors.toList());
+    }
+
+    // Proportion correct item
+    public double propCorrectItem(Integer itemNr, int n) {
+        List<Response> subRes = responses.stream().
+                               filter(r -> r.itemNr==itemNr).
+                               collect(Collectors.toList());
+        long nrCorrect = subRes.stream().limit(n).filter(r -> r.correct).count();
+        return nrCorrect / subRes.size();
+    }
+
+    public long count(Integer itemNr) {
+        return responses.stream().filter(r -> r.itemNr == itemNr).count();
+    }
+
     // Compute proportion correct by chapter
     public double propCorrectChapter(int nr, int chapter) {
         List<Response> subRes = responses

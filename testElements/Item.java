@@ -82,6 +82,11 @@ public class Item {
         return s;
     }
 
+    // Get item number
+    public Integer getItemNr() {
+        return itemNr;
+    } 
+
     // Get question
     public String getQuestion() {
         return question;

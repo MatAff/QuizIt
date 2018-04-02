@@ -62,9 +62,6 @@ hashCode [3 notes]
 Use ‘fixed’ variables. E.g. don't use weight which could change
 When equals is true, hashcode should be same
 obj.hashCode();
-Other [2 notes]
-Virtual method invocation - Implementation depends on class
-Annotation - @Override - indicates a method is being overwritten 
 
 Enums 
 Enum methods [4]
@@ -116,15 +113,16 @@ Static nested classes can be imported using either import static or normal impor
 import static bird.Toucan.Beak;
 Can be extended by concrete (non-static) member/inner classes.
 
-In other news
+Ch01 - Other [2]
 Abstract classes can extend concrete classes
 If you overwrite the public String toString method, that will get called when printing object
-
+Virtual method invocation - Implementation depends on class
+Annotation - @Override - indicates a method is being overwritten 
 Chapter Two – Design Patterns - Done
-Functional interface - @FunctionalInterface [2]
+Functional interface - @FunctionalInterface [2 notes]
 Contains exactly one abstract method, which it may contain through inheritance
 May contain other static/default methods
-Lambda Rules [4]
+Lambda Rules [5]
 If more than one variable parentheses are required
 If input variables are declared all must be declared and parentheses are required
 When return key word is used {} are required
@@ -150,7 +148,7 @@ Composing object
 Create object from smaller pieces such as arms and legs
 These pieces can be instantiated in the constructor
 This way the pieces can be reused elsewhere
-Design pattern: Singleton [3 important pieces]
+Design pattern: Singleton [5, 3 important pieces]
 Single shareable instance; Used by multiple instances; Faster data loading
 Private constructor - private SingletonName() {}
 Private static final member/instance - private static final SingletonName instance = new SingletonName();
@@ -167,11 +165,11 @@ Mark instance variables private and final
 Don't allow access to mutable objects (return copies instead, or use Collections.unmodifiableList())
 Prevent overwriting of methods ((mark class OR methods final) OR mark the constructor private and use a factory pattern)
 Other Design Patterns
-Design pattern: Builder pattern
+Design pattern: Builder pattern [3]
 Separate class to set and build instance
 Tightly coupled
 Sometimes static inner class, can call private constructor
-Design pattern: Factory pattern
+Design pattern: Factory pattern [1]
 Calls relevant class based on e.g. the animal name in switch statement
 Read book design patterns, 1994
 Chapter Three – Generics and Collections - Done
@@ -185,25 +183,25 @@ Create an array of that static type
 Call instanceof
 Use a primitive type
 Create a static variable as a generic type parameter
-Generic Methods [4]
+Generic Methods [4 notes]
 Useful for static methods, where the generic isn't determined by the class
 public static <T> void methodName(T t) ()
 public static <T> T methodName(T t) ( return t; ) // Extra T required as method returns something
 Can be called using: ClassName.<String>methodName(s); // Complicated but valid, <> not required
-Bounds - Allows methods to accept lists of limited types [3 types, 1 note]
+Bounds - Allows methods to accept lists of limited types [4]
 List<?> list = ..
 Upper bound: <? extends Number>; Number of anything that extends Number
 Lower bound: <? super String>; String or super classes of // This is the only one you can add element to directly!
 Use as reference only
 
-Collections [4, 2 notes]
+Collections [6]
 List: ordered collection; May contain duplicates; Access by index
 Set: No duplicate entries
 Queue: Has order; Typically first in-first out, other orderings possible
 Map: Keys to values, no duplicate keys
 Can’t be null: When sorting is involved (everything that is labelled 'tree'); ArrayDeque; Hashtable
 Can be printed directly using System.out.println();
-Common methods [6]
+Common collection methods [6]
 boolean add(E element); 
 boolean contains(Object object); 
 boolean remove(Object object);
@@ -211,18 +209,18 @@ int size();
 void clear(); 
 boolean isEmpty(); 
 
-List [3 types, 7 methods]
+List
 ArrayList; LinkedList; Vector
-Adding, getting, setting, removing [5]
+List: Adding, getting, setting, removing [5]
 void add(E element); 
 void add(int index, E element); 
 E get(int index); 
 E set(int index, E e)	// Replaces and return original
 void remove(int index); // Different from common method, this takes primitive!
-Index [2]
+List: Index [2]
 int indexOf(Object o); // Find first; -1 if not found
 int lastIndex(Object o); // Find last; -1 if not found
-Old List Looping Method [3]
+Old List Looping Method [1, 3]
 Iterator iter = list.iterator(); while(iter.hasNext()) { String string = (String) iter.next(); } // hasNext >> next
 
 
@@ -230,7 +228,7 @@ Set - No duplicates [2]
 HashSet - Uses HashCode to quickly retrieve - No sorting
 TreeSet - Has order - Sorts - Needs to implement Comparable
 No extra methods
-TreeSet - Implement NavigableSet interface (4 methods)
+TreeSet - Implement NavigableSet interface [4 methods]
 E lower(E e) // < e; E floor(E e) // <= e; E ceiling(E e) // >= e; E higher(E e) // > e // or returns null
 lower < floor <= e <= ceiling < higher
 
@@ -238,36 +236,39 @@ Queue [3 types, 8 methods]
 ArrayDeque; LinkedList; Stack;
 FIFO (most common); ArrayDeque: offer > peek > poll
 LIFO; Stack: push > peek > pop
-Adding [3]
+Queue: Adding [3]
 boolean add(E e); // Adds element to the back, returns true or throws exception
 boolean offer(E e); // Adds element to the back, returns true/false [ArrayDeque]
 void push(E e); // Adds element to start, makes it a double ended queue
-Peeking [2]
+Queue: Peeking [2]
 E peek(); Returns next element or null if empty [ArrayDeque, Stack]
 E element(); // Returns next element, throws exception if queue is empty
-Removing [3]
+Queue: Removing [3]
 E poll(); Removes and returns next element or null if empty [ArrayDeque]
 E remove(): Remove and returns next element or throws exception
 E pop(); // Removes and returns next element, throws exception if empty
-Stack [3]
+Stack methods [3]
 void push(E e); // Adds element to the front of the queue. This makes it a double ended queue [ArrayDeque, Strack]
 E pop(); // Removes and returns next element, throws exception if empty
 E peek(); Returns next element or null if empty [ArrayDeque, Stack]
 
-Map - Has value and key (3 types, 10 methods)
+Map - Has value and key (3, 2 types, 10 methods)
 TreeMap – In order of keys; 
 Hashtable – No predictable order; HashMap
 Doesn’t extend Collection
 Methods (no add method!!)
-Putting, getting and removing [3]
+Map: Putting, getting and removing [3]
 V put(K key, V value) // Adds or replaces key/value pair. Returns previous value or null. Adding the same key overwrite, does not throw an Exception!
 V get(Object key) // Returns values based on key
 V remove(Object key) // Returns null if not found
-Common methods [3]
-int size(); boolean isEmpty(); void clear() // Removes all keys and values
-Contains [2]
-boolean containsKey(Object key); boolean containsValue(Object); // There is no .contains() method
-Keys and values [2]
+Map: Common methods [3]
+int size(); 
+boolean isEmpty(); 
+void clear() // Removes all keys and values
+Map: Contains [2]
+boolean containsKey(Object key); 
+boolean containsValue(Object); // There is no .contains() method
+Map: Keys and values [2]
 Set<K> keySet() // Returns keys e.g. map.keySet();
 Collection<V> values() // Returns values e.g. map.values();
 
@@ -276,7 +277,7 @@ Collection<V> values() // Returns values e.g. map.values();
 
 Sorting
 Sorting Order: [0-9][A-Z][a-z]
-Comparable - Interface - implement compareTo method by class
+Comparable - Interface - implement compareTo method by class [5]
 Return: Zero when equal; <0 - current object is smaller; >0 - current object is greater
 id – a.id sorts ascending. e.g. this - that
 Legacy code uses object as input and thus requires casting before comparison
@@ -288,7 +289,7 @@ public class Duck implements Comparable<Duck> {
     public string toString() { return name;  }
     public int compareTo(Duck d) {return name.compareTo(d.name); }  // Call String’s compareTo method
 }
-Comparator
+Comparator [5]
 Separate class<> that allows for sorting by different variables 
 Implemented as inner class
 Method: compare
@@ -328,7 +329,7 @@ System.out::println // Will infer argument - No ()!
 Comparator<Duck> byWeight = DuckHelper::compareByWeight; // Replaces the below…
 Comparator<Duck> byWeight = (d1, d2) -> DuckHelperbhai.compareByWeight(d1, d2);
 
-Collection methods/iterators? [6]
+Collection methods/iterators? [9, 6 methods]
 list.removeIf(s -> s.startsWith("A"));
 list.replaceAll(x -> x*2);
 list.forEach(System.out::println); // Only takes Consumer<>, no variations!
@@ -341,7 +342,7 @@ map.computeIfAbsent
 
 
 Chapter Four - Functional Programming
-Standard Interfaces
+Standard Interfaces [8]
 Functional Interface
 # Parameters
 Return Type
@@ -374,7 +375,7 @@ Optional - Creating [3]
 Optional.empty();
 Optional.of(...); // Create optionals, cannot use null
 Optional.ofNullable(...); // Can handle null
-Optional - Reading [6]
+Optional - Reading [7, 8 methods]
 opt.get(); // Throws NoSuchElementException (logical)
 boolean opt.isPresent(); 
 opt.ifPresent(Consumer c); 
@@ -386,20 +387,22 @@ Also has methods: filter(P), map(F/U)
 Streams
 java.util.stream.*;
 Cr;eate Streams [6 ways]
-Stream<String> empty = Stream.empty(); Stream.of(1, 2, 3); // From data
-Stream<String> fromList = list.stream(); list.parallelStream(); // From list (sorting does not affect original list)
-Don't do this on a Map
+Stream<String> empty = Stream.empty(); 
+Stream.of(1, 2, 3); // From data
+Stream<String> fromList = list.stream();  // Don't do this on Map
+list.parallelStream(); // From list (sorting does not affect original list)
 Stream<Double> randoms = Stream.generate(Math::random); // Random numbers
 Stream<Integer> oddNumbers = Stream.iterate(1, n -> n + 2); // Based on previous value
 Intermediate Operations [8]
 .filter(predicate)
 .distinct()  // Removes duplicates, using equals
-.limit(int) // .skip(int)
+.limit(int) // 
+.skip(int)
 .map()  // Uses Function, or UnaryOperator
 .flatMap() // Always produces a non-parallel stream, requires lamba, (to convert to stream)
 .sorted() // Note Comparator.reverseOrder(), not Comparator::reverseOrder
 .peek() // Doesn't change stream
-Terminal Operations [3-2-3-1-3-1 = 13]
+Terminal Operations [10, 3-2-3-1-3-1 = 13]
 long count(); Optional<T> min(); Optional<T> max(); // Reductions; Returns Optionals! min, max need Comparator arg
 These is no sum(); // Only exists for primitive streams
 findAny(); findFirst(); // Returns Optional<T>, these are not reductions, they don't take arguments. Returns Optionals!
@@ -418,15 +421,15 @@ Primitive Streams [3 types, 4 methods]
 IntStream; LongStream; DoubleStream; // Watch spelling
 IntStream.range(1,6); IntStream.rangeClosed(1,5);
 DoubleStream.generate(Math::random); DoubleStream.iterate(0.5, d -> d / 2);
-Functions to convert different stream type (2 rules)
+Functions to convert different stream type [3]
 To same always map, i.e. can't call others on self!
 Steam = mapToObj; DoubleStream = mapToDouble; IntStream = mapToInt; LongStream = mapToLong
 Watch out for mapToBool nonsense!
-Interface to use as parameter in those map... functions (2 rules)
+Interface to use as parameter in those map... functions [2]
 StartToEnd e.g. IntToLongFunction, ToLongFunction
 SelfUnaryOperator e.g. DoubleUnaryOperator (stream to stream is just Function)
 
-Functional interfaces for double, int, long [3x6]
+Functional interfaces for double, int, long [5, 3x6]
 Double/Int/Long  Supplier/Consumer/Predicate/Function<R>/UnaryOperator/BinaryOperator 
 Return generic is specified for Function, and only for Function!
 methods often renamed to reflect type (not for Consumer, Predicate, Function)
@@ -441,14 +444,14 @@ Primitive Optionals
 Optional with primitive streams: 
 OptionalDouble; OptionalInt; OptionalLong
 e.g. stream.average(); // Returns OptionalDouble
- Optional methods (4)
+ Optional methods [2, 4]
 Getting as primitive: getAsDouble(); getAsInt(); getAsLong();
 .orElseGet(Double/Int/LongSupplier);
-Stats (3)
+Stats [3]
 .max(); returns OptionalDouble/Int/Long;
 .sum(); returns double/int/long;
 .average(); // Always return OptionalDouble, not written in full >> Actually it is written in full! (Double check in book)
-Summary Statistics (4)
+Summary Statistics [5]
 IntSummaryStatistics stats = ints.summaryStatistics(); // Written in full!
 stats.getMax(); 
 stats.getMin();
@@ -508,7 +511,7 @@ Period.ofYears(); .ofMonths(); ofWeeks(); ofDays(); of(year, month, day);
 Don't string together, only last one will apply
 P1Y2M3D or P21D // when printing
 
-Duration (for time (and days)) [7 methods, 4 notes]
+Duration (for time (and days)) [4, 7 methods, 4 notes]
 Duration.ofDays(); .ofHours(); .ofMinutes(); .ofSeconds(); .ofMillis(); .ofNanos(); 
 Duration.of(1, ChonosUnit.Days); ChonosUnit.HOURS; .MINUTES; .SECONDS; .MILLIS; .NANOS;
 Only one unit at a time, don't string together, only last one will apply
@@ -525,24 +528,24 @@ Get date elements [4]
 .getMonth(); JANUARY // Returns Enum
 .getYear(); 2020  
 .getDayOfYear(); 20
-DateTimeFormatter
+DateTimeFormatter [2]
 import java.time.format.*;
 Only  call on appropriate data types
-Format directly
+Format directly [3]
 date.format(DateTimeFormattter.ISO_LOCAL_DATE); 2020-01-20
 time.format(DateTimeFormattter.ISO_LOCAL_TIME); 11:12:34
 dateTime.format(DateTimeFormattter.ISO_LOCAL_DATE_TIME); 2020-01-20T11:12:34
-Create formatter
+Create formatter [2]
 DateTimeFormatter shortDateTime = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT); // Only Date
 DateTimeFormatter f = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT); // Only prints time
-DateTime can be either object of parameter
+DateTime can be either object of parameter [2]
 shortDateTime.format(dateTime); // 1/20/20 (Date piece only)
 dateTime.format(shortDateTime); // Equivalent!
-Format styles
+Format styles [3]
 FormatStyle.ISO_LOCAL_DATE/_TIME_DATE_TIME // 2020-01-20T11:12:34
 FormatStyle.SHORT // 1/20/20 11:12 AM
 FormatStyle.MEDIUM // Jan 20, 2020 11:12:34 AM
-Pattern
+Pattern [8]
 FormatStyle.ofPattern(“MMMM dd, yyy, hh:mm”); // Can throw runtime exception, with non usable pattern
 yyyy - year: yy = 16, yyyy = 2016
 MMMM - Month: M = 1, MM = 01, MMM = Jan, MMMM = January // Month is the only one using capitals
@@ -553,7 +556,8 @@ mm - minute
 .parse(“01 02 2015”, f);
 
 Formatting
-Formatting Numbers (5 methods, 2 notes)
+java.text.*;
+Formatting Numbers [7, 5 methods, 2 notes]
 en = NumberFormat.getInstance(Locale.US); // Or no argument
 en = NumberFormat.getNumberInstance(...);
 en = NumberFormat.getCurrencyInstance(...);
@@ -658,10 +662,10 @@ Keep an eye for question with assert without assertions enable, those will run!
 Chapter Seven Concurrency
 Daemon thread: Will not prevent JVM from exiting
 Thread.MIN_PRIORITY; .NORM_PRIORITY; .MAX_PRIORITY
-Interfaces (2)
+Concurrent Interfaces [2]
 Runnable - void run(); // For action
 Callable<T> T run(); // Returns generic and throw Exceptions! For tasks!
-Create thread (3)
+Create thread [10]
 Beware of cases where run is called instead of start, as those run on the same thread
 implements Runnable (preferred)
 Overwrite void run()
@@ -673,10 +677,10 @@ Overwrite void run()
 In main (new MyClass()).start();
 Pro, potential to set priority
 ExecutorService
-Polling with Sleep
+Polling with Sleep [2]
 Check whether thread has finished, include Thread.sleep(...); To prevent constant checking.
 Add to main: throws InterruptedException or try/catch block
-ExecutorService(5)
+ExecutorService [7, 5]
 Import .java.util.concurrent.*;
 Obtain through Executors Factory class
                  ExecutorService service = Executors.newSingleThreadExecutor();
@@ -684,6 +688,7 @@ ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
                  ExecutorService service = Executors.newCachedThreadPool();
                  ExecutorService service =  Executors.newFixedThreadPool(int nThreads);
 ScheduledExecutorService service = Executors.newScheduledTheadPool(int nThreads);
+Executor service method [6]
 service.execute(Lamba Expression);
 Add try/finally { if(service!=null) service.shutdown();
 isShutdown() // true after .shutdown() called
@@ -696,14 +701,14 @@ Future<?> submit(Runnable task);  f.get(); >> null (Runnable doesn't return anyt
 <T> Future<T> submit(Callable<T> tasks); // Runnable or Callable
 <T> List<Future<T>> invokeAll(Collection<? Extends Callable<T>> tasks) throws InterruptedException
 <T> T invokeAny(Collection<? Extends Callable<T>> tasks) throws InterruptedException, ExecutionExpection
-Future methods (5)
+Future methods [5]
 boolean isDone(); // Is the task complete
 boolean isCancelled()
 boolean cancel()
 V get(); // Return null for Runnable // has Exceptions that need to be caught!
 V get(long timeout, TimUnit unit) // In addition has timeoutException
 The future itself contains a reference e.g. java.util.concurrent.FutureTask@12ec34e which can be printed.
-Scheduling Tasks (4)
+Scheduling Tasks [4]
 schedule(Callable<V> callable, long delay, TimeUnit unit);
 schedule(Runnable command, long delay, TimeUnit unit);
 scheduleAtFixedRate() // Runnable, 4 agrs
@@ -711,12 +716,12 @@ scheduleAtFixedDelay // Runnable, 4 agrs
 Time units; TimeUnit.NANOSECONDS .MICROSECONDS .MILLISECONDS .SECONDS, .MINUTES, .HOURS, .DAYS
 
 Data Management
-Atomic Classes (7)
+Atomic Classes [4. 7]
 AtomicBoolean
 AtomicInteger; AtomicIntegerArray
 AtomicLong; AtomicLongArray
 AtomicReference; AtomicReferenceArray
-Atomic Methods (7)
+Atomic Methods [2, 7]
 get(); set(); getAndSet()
 incrementAndGet(); getAndIncrement(); decrementAndGet(); getAndDecrement();
 Synchronized
@@ -749,20 +754,20 @@ SynchornizedSet(Set<T> s)
 synchronizedSortedMap(SortedMap<MK,V> m)
 syncrhonizedSortedSet(SortedSet<T> s)
 Don't modify while iterating over these, this will lead to ConcurrentModificationException
-Parallel Streams (2 to create, 3 terminal operations)
+Parallel Streams (12, 2 to create, 3 terminal operations)
 stream.parallel();
 list.parallelStream();
 Avoid stateful lambda expressions
 .forEachOrdered();
-reduce() requirements (3 args)
+parallel reduce() requirements [3 args]
 Identity: must be defined such that .apply(indentify, u) is equal to u
 Accumulator must be associative and stateless such that (a op b) op c == a op (b op c)
 Combiner: must be associative and stateless it aligns with the accumulator
-collect() requirements (3)
+parallel collect() requirements [3]
 the stream is parallel
 Collector.Characteristics.CONCURRENT
 Collector.Characteristics.UNORDERED
-CyclicBarrier (4 points)
+CyclicBarrier [4 points]
 CyclicBarrier c = new CyclicBarrier(4); // number is threatcount to be reached otherwise hangs
 Takes second argument (lambda) to print something
 c.await(); // Waits for all tasks to finish
@@ -789,12 +794,12 @@ Create ForkJoinPool - ForkJoinPool pool = new ForkJoinPool();
 Start the ForkJoinTask (4)
 pool.invoke(task); // No return value for action
 Double sum = pool.invoke(task); // Return type for task
-Identifying Threading Problems (4)
+Identifying Threading Problems [4]
 Liveness: The ability of an application to execute in a timely manner
 Deadlock: Two threads are waiting for each other; Can't happen with SingleThreadExe...
 Starvation: A threat is unable to get access to the resource it needs
 Livelock: Occurs when threats are trying to resolve or avoid a deadlock
-Managing race conditions (2)
+Managing race conditions [2]
 Two requests are being submitted at the same time
 Ideally: access one, and deny the other (rather than denying both)
 
@@ -803,24 +808,25 @@ Streams (the I/O kind) (8-8-2 methods)
 Byte stream: Use input stream and output stream
 Character stream: Use reader and writer; Deals with encoding for you
 new ObjectInputStream(new BufferedInputStream(new FileInputStream)))
-InputStream - OutputStream > Abstract!! Do not instantiate!
+InputStream - OutputStream > Abstract!! Do not instantiate! [3]
 FileInputStream - FileOutputStream > Bytes
 BufferedInputStream - BufferedOutputStream
 ObjectInputStream - ObjectOutputStream > Higher level!
-Reader - Writer > Also abstract! Do not instantiate!
+Reader - Writer > Also abstract! Do not instantiate! [3]
 FileReader - FileWriter > Characters
 BufferedReader - BufferedWriter
 InputStreamReader - OutputStreamWriter > Character data from stream
+Printers [2]
 PrintStream > Writes formatted java objects to binary stream
 PrintWriter > Writes java objects to text based output
 Flushing: .flush() > Encourage writing to disk; use sparsely; Is called by close(); // For writing to disk, not reading
 Closing: call .close() in finally block or use try-with-resource syntax
-Marking and reset and Skipping (4)
+Marking and reset and Skipping [4]
 .markSupported(); // Check support for marking; Watch for question on this, will throw exception!
 .mark(int n); // Mark a location for the next n bytes; if not supported throws runtime exception
 .skip(numberOfBytesToSkip)
 .reset() // Go back to marked location Passing mark read limit may lead to exception when calling .reset()
-Serializable (7)	
+Serializable [7]
 Tagging or marker interface (has no methods)
 Class and object within must be marked Serializable or transient (indicating it does not need to be saved)
 Throws NotSerializableException
@@ -828,7 +834,7 @@ Static variables are ignored (however values may have been retained if objects a
 private static final long serialVersionUID = 1L; // Is stored; Watch for spelling; Recommended, not required
 Deserialization may throw ClassNotFoundException
 No class constructor or default initializations are used in the deserialization process
-PrintStream - PrintWriter - Do not throw exceptions (?)
+PrintStream - PrintWriter - Do not throw exceptions ? [5]
 Can open and write to files directly 
 PrintWriter can work with OutputStream and format too
 System.out and System.err are actually PrintStream objects
@@ -846,14 +852,14 @@ import java.io.Console;
 Console console = System.console(); // Created using singleton pattern
 Note console could be null if not available
 if (console != null) { String userInput = console.readLine(); }
-Write methods, memorize these! (5)
+Console write methods, memorize these! [6]
 console.printf();  // Does not need the writer part
 console.format(); // Does not need the writer part
 console.writer().println; // Needs the writer part
 console.writer().print // Needs the writer part
 console.writer().write() // Needs the writer part
 console.flush(); // Write remaining output immediately; Recommended to call before read commands...
-Read methods (3)
+Console read methods [3]
 console.reader().read();
 console.readLine(); // Without reader()
 console.readPassword(); // Remember returns char[]; More secure, avoids use of StringPool, memory can be erased
@@ -865,23 +871,23 @@ Separator
 System.getProperty(“file.separator”));
 java.io.File.separator
 Methods (14) 
-File elements (3)
+File elements [4, 3]
 file.getName(); // Return last element
 file.getAbsolutePath(); // Adds root
 file.getParent() // Returns abstract pathname, or null if parent directory is not named
 There is no .getRoo()t method
-File characteristics (5)
+File characteristics [5]
 file.exists(); // Non existing >> false
 file.isDirectory(); // Non-existing >> false
 file.isFile(); // Non-existing >> false
 file.length(); // Non-existing >> 0
 file.lastModified // Returns number of milliseconds since the epoch, non-existing >> 0
-File alterations (4)
+File alterations [4]
 file.renameTo(File); // There is no .copy() method 
 file.delete(); // returns boolean 
 file.mkdir(); 
 file.mkdirs()  // Makes directory; mkdirs - including missing parent directories
-File listing (2)
+File listing [2]
 .listFiles()	// Returns File[] array
 .list(); // Returns String[] array >> Note that this is different from Files.list()!
 NIO Alternatives
@@ -896,7 +902,6 @@ file.mkdir(); 	>> Files.createDirectory(path);
 file.mkdirs(); 	>> Files.createDirectories(path);
 file.listFiles(); 	>> Files.list(path).map(p -> p.toFile).collect(Collectors.toList());
 file.list(); 		>> Files.list(path).map(p -> p.toString).collect(Collectors.toList());
-
 Chapter Nine - NIO.2
 Path
 import java.nio.file.Path or .*
@@ -910,7 +915,7 @@ Paths: Factory class that can produce Path objects
 Path symbols
 . = current directory
 .. = patent of current directory
-Create Path (5)
+Create Path [5]
 Paths.get(String); 
 Paths.get(varag String[]); // Overloaded with vararg
 Paths.get(URI); // URI (Uniform Resource Identifier) must reference absolute path
@@ -919,11 +924,11 @@ FileSystems.getDefault().getPath(...); // FileSystems factory class to create in
 Path methods 
 These can be strung together where it makes sense (15 methods)
 Immutable: Ensure result is assigned!
-Path to methods (5)
+Path to methods [3]
 path.toFile(); 
 path.toURI(); 
 path.toString();
-Path elements (7)
+Path elements [7]
 path.getNameCount(); // Returns the number of elements in the Path
 path.getName(int index); // Returns a specific element of the Path as a new Path object
 path.subpath(0.3); // Excludes last nr obviously
@@ -931,24 +936,25 @@ path.getFileName(); // Returns Path
 path.getRoot(); // Returns Path
 path.getParent(); // Returns Path
 path.toAbsolutePath(); // Create path starting from root
-Path characteristics (1)
+Path characteristics [1]
 path.isAbsolute(); // Does path start from root?
-Path manipulate (4)
+Path manipulate [4]
 path1.relativize(path2); // Show how to get to other file. Requires both to be either relative or abstract, otherwise throws error!
 path1.resolve(path2); // For joining paths; Running this with an absolute path as argument will return just the absolute path!
 path.normalize(); // For cleaning up path symbols; Relative paths do not become absolute
 path.toRealPath(); // Checks that file exists, after normalizing. Be sure to handle possible IOException e
 Files
-Optional Arguments (5)
+Optional Arguments [5]
 NOFOLLOW_LINKS: // Don't traverse symbolic links
 FOLLOW_LINKS  // Not the default!
 COPY_ATTRIBUTES // Also copy metadata. Default!
 REPLACE_EXISTING: Overwrite, otherwise exception will be throw is file exists (not the default)
 ATOMIC_MOVE: Perform the move in an atomic manner. If not supported a AtomicMoveNotSupportedException could be thrown.
 Files - Helper class which takes Path as arguments (12 methods)
+Files check methods [2]
 Files.exists(path); // Does not throw an exception
 Files.isSameFile(p,p); // Throws IOException if either file does not exist or NoSuchFileException
-Files alteration
+Files alteration [6]
 Files.createDirectory(p); 
 Files.createDirectories(p);
 Files.copy(p,p); // Could take InputStream, path, options..) Can copy to outputstream, which has to go second!
@@ -970,16 +976,16 @@ Files.getLastModifiedTime();
 Files.setLastModifiedTime();
 Files.getOwner(); 
 Files.setOwner();
-Walking and Searching using Files [3 methods]
+Walking and Searching using Files [6, 3 methods]
 Java, lazy, depth first. Avoid circular paths, throws FileSystemLoopException
 Stream<Path> Files.walk(path). May throw error when missing access permission. NOFOLLOW_LINKS is default
 Also goes through subdirectories
 May encounter files it does not have permission to read
 Stream<Path> Files.find(path, depth, BiPredicate). ...; // Catch Exception e; BiPredicate using Path, BasicFileAttributes
 Stream<Path> Files.list(path) throws IOException // Note difference with File.list() // Only lists files in current directory
-Views [4 methods]
+Views 
 Faster for multiple attributes; Fewer trips; Adapts to file system
-View creation
+View creation [4]
 BasicFileAttributes data = Files.readAttributes(path, BasicFileAttributes.class); // Cannot modify, watch for questions!
 BasicFileAttributeView.class // Can also alter
 DosFileAttributes; 
@@ -989,7 +995,7 @@ data.isOther();
 data.lastAccessTime(); 
 data.creationTime(); 
 data.fileKey();
-View modifying
+View modifying [4]
 Make sure the 'view' versions are used consistently
 BasicFileAttributeView view = Files.getFileAttributeView(path,BasicFileAttributeView.class);
 BasicFileAttributes data = view.readAttributes();
@@ -1029,11 +1035,11 @@ Throws ClassNotFoundException
 Class.forName(“org.postgresql.Driver”);	// Still works. Watch out for questions where version number is mentioned
 Was required for Java 3 and below
 If Java >=4 then META-INF/service/java.sql.Driver is required // Otherwise SQLException is thrown
-ResultSet Type
+ResultSet Type [3]
 ResultSet.TYPE_FORWARD_ONLY	// Can’t go backward, watch for question that scroll with this of default!!!
 ResultSet.TYPE_SCROLL_INSENSITIVE // Can go backward. Don't get distracted by INSENSITIVE it's often the SCROLL that matters
 ResultSet.TYPE_SCROLL_SENSITIVE // Also sees latest (updated) data, not well supported
-ResultSet Concurrency Mode (second argument only, but does compile, but means something else)
+ResultSet Concurrency Mode (second argument only, but does compile, but means something else) [2]
 ResultSet.CONCUR_READ_ONLY
 ResultSet.CONCUR_UPDATABLE // Less used - Least used
 Statement [4 methods]
@@ -1042,7 +1048,7 @@ bool b = stmt.execute() // Can alter; Cannot return data; Boolean; true for sele
 ResultSet rs = stmt.executeQuery() // Cannot alter: Can return ResultSet (Running another query closes first rs!)
 stmt.executeUpdate() // Can alter; Return nr (int) rows changed
 In real life use PreparedStatement for security reasons
-Reading ResultSet [9 methods]
+Reading ResultSet [5, 9 methods]
 while(rs.next()) { int id = rs.getInt(“id”); }
 .getBoolean(); .getInt(...); .getDouble(); .getLong(); // Int not spelled in full
 .getString(...); .getObject();
