@@ -9,6 +9,7 @@ Created on Sat Jan 18 12:27:33 2020
 # TODO: find way to check if Firebase app exists
 # TODO: consider implementing Learn as a generator
 # TODO: use current approach
+# TODO: enable system commen like EXIT, FLAG
 
 import time
 import datetime
@@ -32,15 +33,15 @@ def get_items_fb(sub_loc):
 
 
 def remove_accents(t):
-    acc = 'âäàåáêëèéïîìíóüçúûùñ'
-    rep = 'aaaaaeeeeiiiioucuuun'
+    acc = 'âäàåáêëèéïîìíóüçúûùññ'
+    rep = 'aaaaaeeeeiiiioucuuunn'
     for e in zip(acc, rep):
         t = t.replace(e[0], e[1])
     return t
 
 
 def remove_punc(t):
-    punc = '?,.()'
+    punc = '?!,.()'
     for e in punc:
         t = t.replace(e[0], "")
     return t
@@ -67,21 +68,22 @@ class Learn(object):
         self.item_selector = Selector(self.items)
 
     def evalute(self, item, response):
-        correct = item.answer == response
+        correct = remove(item.answer) == remove(response)
         ts = time.time()
         ts_str = datetime.datetime.now().replace(microsecond=0).isoformat()
         store = {ts_str: {'ts': ts, 'key': item.key, 'correct': correct}}
         Firebase.update(FB_URL, self.resp_sub_loc, store)
         self.responses = pd.concat([self.responses, pd.DataFrame(store).T])
+        return correct
 
     def next(self):
         item = self.item_selector.select(self.responses, method='basic_prob')
         response = input('\n' + item.question + ': ')
-        if remove(response) == remove(item.answer):
+        correct = self.evalute(item, response)
+        if correct:
             print("correct")
         else:
             print("incorrect: " + item.answer)
-        self.evalute(item, response)
 
 
 def main():
