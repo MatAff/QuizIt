@@ -30,6 +30,11 @@ SHEET = {'id': '1GxmPiZsd0Z7n065ePXqhVbqsPlFC35KVBFi1VuiJ8f8',
          'name': 'Russian2000'}
 topic = 'russian'
 
+# sheet details - french
+SHEET = {'id': '1aRSpyZKph2lu1ljfNAnIWci4raMwS4lPO-9DjAGx2HI',
+         'name': 'WordList'}
+topic = 'french'
+
 
 def main():
 
