@@ -8,11 +8,13 @@ Created on Sat Jan 18 12:27:33 2020
 
 # TODO: find way to check if Firebase app exists
 # TODO: consider implementing Learn as a generator
+# TODO: use current approach
 
 import time
 import datetime
 import pandas as pd
 from firebase_helper import Firebase
+from selector import Selector
 
 FILE_FB_CREDS = '../../../credentials/' + \
                 'quiz-it-c6643-firebase-adminsdk-32pqc-574194610f.json'
@@ -28,15 +30,29 @@ def get_items_fb(sub_loc):
         pass
     return Firebase.get_df(FB_URL, sub_loc)
 
-class ItemSelector(object):
-    
-    def __init__(self, items):
-        self.items = items
 
-    def estimate_prob(self, responses):
-        prob = pd.DataFrame(0.5, index = items.key)
-    def select(responses):
-        
+def remove_accents(t):
+    acc = 'âäàåáêëèéïîìíóüçúûùñ'
+    rep = 'aaaaaeeeeiiiioucuuun'
+    for e in zip(acc, rep):
+        t = t.replace(e[0], e[1])
+    return t
+
+
+def remove_punc(t):
+    punc = '?,.()'
+    for e in punc:
+        t = t.replace(e[0], "")
+    return t
+
+
+def remove(t, punc=True, accents=True):
+    if punc:
+        t = remove_punc(t)
+    if accents:
+        t = remove_accents(t)
+    return t
+
 
 class Learn(object):
 
@@ -48,9 +64,7 @@ class Learn(object):
         self.resp_sub_loc = ['response', topic, self.user_loc]
         res = Firebase.get_df(FB_URL, self.resp_sub_loc, False)
         self.responses = pd.DataFrame.from_dict(res, orient='index')
-
-    def pick(self):
-        return self.items.sample(1).iloc[0, :]
+        self.item_selector = Selector(self.items)
 
     def evalute(self, item, response):
         correct = item.answer == response
@@ -58,15 +72,15 @@ class Learn(object):
         ts_str = datetime.datetime.now().replace(microsecond=0).isoformat()
         store = {ts_str: {'ts': ts, 'key': item.key, 'correct': correct}}
         Firebase.update(FB_URL, self.resp_sub_loc, store)
-        pd.concat([learn.responses, pd.DataFrame(store).T]) # update local info
+        self.responses = pd.concat([self.responses, pd.DataFrame(store).T])
 
     def next(self):
-        item = self.pick()
-        response = input(item.question + ': ')
-        if response == item.answer:
+        item = self.item_selector.select(self.responses, method='basic_prob')
+        response = input('\n' + item.question + ': ')
+        if remove(response) == remove(item.answer):
             print("correct")
         else:
-            print("incorrect")
+            print("incorrect: " + item.answer)
         self.evalute(item, response)
 
 

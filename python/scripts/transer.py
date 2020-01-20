@@ -20,17 +20,22 @@ FILE_FB_CREDS = '../../../credentials/' + \
                 'quiz-it-c6643-firebase-adminsdk-32pqc-574194610f.json'
 FB_URL = 'https://quiz-it-c6643.firebaseio.com'
 
-# sheet details
-SPANISH = {'id': '1LW69o3iJeJZUGCrJ1HfX19gMZXQNR0jGNbvscB6zQQA',
-           'name': 'WordList'}
+# sheet details - spanish
+SHEET = {'id': '1LW69o3iJeJZUGCrJ1HfX19gMZXQNR0jGNbvscB6zQQA',
+         'name': 'WordList'}
 topic = 'spanish'
+
+# sheet details - russian
+SHEET = {'id': '1GxmPiZsd0Z7n065ePXqhVbqsPlFC35KVBFi1VuiJ8f8',
+         'name': 'Russian2000'}
+topic = 'russian'
 
 
 def main():
 
     # get sheet content
     gs = Google(FILE_GS_CREDS, FILE_GS_TOKEN)
-    df = gs.sheet_content(SPANISH['id'], SPANISH['name'], 3)
+    df = gs.sheet_content(SHEET['id'], SHEET['name'], 3)
     print(df.head(10))
 
     # add common key
