@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+{% extends "quizit/base.html" %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form_group">
+                <legend class="border_bottom mb-4">
+                    Login
+                </legend>
+                {{ form.as_p }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btrn btn-outline-info" type="submit">Login</button>
+            </div>
+        </form>
+        <div class="border-top pt3">
+            <small class="text-muted">
+                Need An Account? <a class="ml-2" href="{% url 'register' % }">Sign Up Now</a>
+            </small>
+        </div>
+    </div>
+{% endblock content %}

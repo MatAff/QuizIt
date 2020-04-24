@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+
+{% extends "quizit/base.html" %}
+{% block content %}
+	<h1>Quiz It</h1>	
+	<h2>Data driven language learning</h2>
+	{% for post in posts %}
+		<h1>{{post.a}}</h1>
+	{% endfor %}
+{% endblock content %}
