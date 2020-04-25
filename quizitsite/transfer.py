@@ -48,11 +48,11 @@ def main():
         row = df.iloc[r]
         item = Item(topic=topic,
                     index=row['index'],
-                    question_text=row['question'],
+                    question=row['question'],
                     answer=row['answer'],
                     key=row['key'],
                     tags=row['tag'])
-        print(item.question_text)
+        print(item.question)
         item.save()
 
 

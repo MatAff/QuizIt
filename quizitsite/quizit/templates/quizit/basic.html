@@ -19,7 +19,7 @@
 			<form action="{% url 'quizit:basic' item.id %}" method="post" class="item">
 
 				{% csrf_token %}
-				<label name="question_text"> {{ item.question_text }} </label><br><br>
+				<label name="question"> {{ item.question }} </label><br><br>
 				<input class="item" name="given_answer" type="text" value="" autocomplete="off" autofocus> 
 
 			</form>

@@ -7,13 +7,13 @@ class Item(models.Model):
 
     topic = models.CharField(max_length=100)
     index = models.IntegerField()
-    question_text = models.CharField(max_length=400)
+    question = models.CharField(max_length=400)
     answer = models.CharField(max_length=400)
     key = models.CharField(max_length=801)
     tags = models.CharField(max_length=400)
 
     def __repr__(self):
-        return '; '.join([self.question_text,
+        return '; '.join([self.question,
                           self.answer, 
                           self.key])
     
@@ -21,13 +21,13 @@ class Item(models.Model):
         return self.__repr__()
 
     def to_list(self):
-        return [self.topic, self.index, self.question_text, 
+        return [self.topic, self.index, self.question, 
                 self.answer, self.key, self.tags]
 
     def to_dict(self):
         return {'topic': self.topic, 
                 'index': self.index, 
-                'question_text': self.question_text, 
+                'question': self.question, 
                 'answer': self.answer, 
                 'key': self.key, 
                 'tags': self.tags}
