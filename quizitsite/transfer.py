@@ -37,7 +37,7 @@ def main():
     print(df.head(10))
 
     # add common key
-    df.columns = ['question', 'answer', 'tag']
+    df.columns = ['question', 'answer', 'tag', 'alternatives']
     df['key'] = df.iloc[:, 0] + "|" + df.iloc[:, 1]
     df = df[df.key.duplicated() == False]
     df = df.reset_index()
@@ -51,7 +51,8 @@ def main():
                     question=row['question'],
                     answer=row['answer'],
                     key=row['key'],
-                    tags=row['tag'])
+                    tags=row['tag'], 
+                    alts=row['alternatives'])
         print(item.question)
         item.save()
 
