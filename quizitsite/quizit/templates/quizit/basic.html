@@ -16,7 +16,7 @@
 	<body>
 		<div class="item">
 			<br><br><br>
-			<form action="{% url 'quizit:answer' item.id %}" method="post" class="item">
+			<form action="{% url 'quizit:basic' item.id %}" method="post" class="item">
 
 				{% csrf_token %}
 				<label name="question_text"> {{ item.question_text }} </label><br><br>

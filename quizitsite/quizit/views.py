@@ -10,14 +10,6 @@ from django.contrib.auth.decorators import login_required
 # from quizit.models import Item
 from quizit.learn import Learn
 
-posts = [
-    {
-        'a': 'a'
-    },
-    {
-        'a': 'b'
-    }
-]
 
 def index(request):
     return HttpResponse("QuizIt app index")
@@ -26,17 +18,13 @@ def about(request):
     return render(request, 'quizit/about.html')
 
 @login_required
-def basic(request, feedback=None):
-    print('user: ' + str(request.user.email))
-    item = Learn().get_item(request.user.email)
-    if feedback is None:
-        feedback = ""
-    return render(request, 'quizit/basic.html', {'item': item, 'feedback': feedback})
+def basic(request, item_id=None):
 
-@login_required
-def answer(request, item_id):
-    print(item_id)
-    given_answer = request.POST['given_answer']
-    print(given_answer)
-    correct, feedback = Learn().check(item_id, given_answer, request.user.email)
-    return basic(request, feedback)
+    if request.method == 'POST':
+        given_answer = request.POST['given_answer']
+        _, feedback = Learn().check(item_id, given_answer, request.user.email)
+        item = Learn().get_item(request.user.email)
+        return render(request, 'quizit/basic.html', {'item': item, 'feedback': feedback})
+
+    item = Learn().get_item(request.user.email)
+    return render(request, 'quizit/basic.html', {'item': item, 'feedback': ""})
