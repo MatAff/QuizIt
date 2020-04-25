@@ -11,7 +11,7 @@ class Item(models.Model):
     answer = models.CharField(max_length=400)
     key = models.CharField(max_length=801)
     tags = models.CharField(max_length=400)
-#    alts = models.CharField(max_length=800)
+    alts = models.CharField(max_length=800)
 
     def __repr__(self):
         return '; '.join([self.question,
@@ -31,8 +31,8 @@ class Item(models.Model):
                 'question': self.question, 
                 'answer': self.answer, 
                 'key': self.key, 
-                'tags': self.tags}
- #               'alts': self.alts}
+                'tags': self.tags
+                'alts': self.alts}
 
 class Response(models.Model):
 
