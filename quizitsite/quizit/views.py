@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 # from quizit.models import Item
-from quizit.learn import Learn
+from quizit.learn_dj import LearnDJ
 
 
 def index(request):
@@ -22,9 +22,9 @@ def basic(request, item_id=None):
 
     if request.method == 'POST':
         given_answer = request.POST['given_answer']
-        _, feedback = Learn().check(item_id, given_answer, request.user.email)
-        item = Learn().get_item(request.user.email)
+        _, feedback = LearnDJ().check(item_id, given_answer, request.user.email)
+        item = LearnDJ().get_item(request.user.email)
         return render(request, 'quizit/basic.html', {'item': item, 'feedback': feedback})
 
-    item = Learn().get_item(request.user.email)
+    item = LearnDJ().get_item(request.user.email)
     return render(request, 'quizit/basic.html', {'item': item, 'feedback': ""})
