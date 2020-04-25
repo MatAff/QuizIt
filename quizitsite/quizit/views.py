@@ -22,16 +22,6 @@ posts = [
 def index(request):
     return HttpResponse("QuizIt app index")
 
-def go(request):
-    return render(request, 'quizit/go.html')
-
-def home(request):
-    context = {
-        'posts': posts
-    }
-    return render(request, 'quizit/home.html', context)
-    #return HttpResponse('<h1>Home</h1>')
-
 def about(request):
     return render(request, 'quizit/about.html')
 
@@ -42,7 +32,6 @@ def basic(request, feedback=None):
     if feedback is None:
         feedback = ""
     return render(request, 'quizit/basic.html', {'item': item, 'feedback': feedback})
-
 
 @login_required
 def answer(request, item_id):

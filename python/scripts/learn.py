@@ -37,6 +37,7 @@ def remove_accents(t):
     rep = 'aaaaaeeeeiiiioucuuunn'
     for e in zip(acc, rep):
         t = t.replace(e[0], e[1])
+    #  from string import maketrans
     return t
 
 

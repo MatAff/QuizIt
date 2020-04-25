@@ -6,9 +6,9 @@ Created on Sun Jan 19 11:09:08 2020
 @author: ma
 """
 
-# TODO: figure out why words keep repeating
-# TODO: improve method to estimate probability
-# TODO: implement method to avoid close repetition of items
+# TODO: figure out why words keep repeating >> Done
+# TODO: implement weighted method to estimate probability >> Done
+# TODO: implement method to avoid close repetition of items >> Done
 # TODO: create more efficient method to select next item
 # TODO: clean up
 # TODO: condider keeping track of learn items, rather than pick every time
@@ -53,6 +53,7 @@ class Selector(object):
         self.basic_prob = pd.DataFrame(prior, index=self.items.key,
                                        columns=['prob'])
         keys = responses.key.unique()
+        keys = keys[pd.Series(keys).apply(lambda k: k in self.items.key.values)]
         for k in keys:
             # self.basic_prob.loc[k, 'prob'] = self.mean_resp(k, responses)
             self.basic_prob.loc[k, 'prob'] = self.mean_w_resp(k, responses)
