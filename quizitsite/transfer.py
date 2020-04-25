@@ -10,8 +10,8 @@ from quizit.models import Item
 from google_helper import Google
 
 # credentials
-FILE_GS_CREDS = '../../credentials/google_sheets_credentials.json'
-FILE_GS_TOKEN = '../../credentials/google_sheets_token.pickle'
+FILE_GS_CREDS = '../../../credentials/google_sheets_credentials.json'
+FILE_GS_TOKEN = '../../../credentials/google_sheets_token.pickle'
 
 # sheet details - spanish
 SHEET = {'id': '1LW69o3iJeJZUGCrJ1HfX19gMZXQNR0jGNbvscB6zQQA',
