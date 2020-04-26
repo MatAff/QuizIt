@@ -8,6 +8,8 @@ import pandas as pd
 class Learn(object):
 
     def get_recent_items(self, response_df, n):
+        if response_df.shape[0] == 0:
+            return []
         response_df = response_df.sort_values(by='ts', ascending=False)
         return response_df['key'][0:n]
 
@@ -31,6 +33,11 @@ class Learn(object):
     def simple(self, item_df, response_df):
         
         know_thresh = 0.8
+
+        # if reponses is empty return random item
+        if response_df.shape[0] == 0:
+            rand_int = random.randint(0, 10)
+            return item_df.iloc[rand_int, :]
 
         # determine recent items
         recent_items = self.get_recent_items(response_df, n=5)
