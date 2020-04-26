@@ -10,7 +10,7 @@ import pandas as pd
 from quizit.models import Item
 
 # sheet details - spanish
-base_path = '../../data/'
+base_path = '../data/'
 print(os.listdir(base_path))
 path = os.path.join(base_path, 'spanish.xlsx')
 topic = 'spanish'
