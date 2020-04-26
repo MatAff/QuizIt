@@ -31,7 +31,7 @@ class Item(models.Model):
                 'question': self.question, 
                 'answer': self.answer, 
                 'key': self.key, 
-                'tags': self.tags
+                'tags': self.tags,
                 'alts': self.alts}
 
 class Response(models.Model):
