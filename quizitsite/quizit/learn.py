@@ -1,5 +1,5 @@
 
-import random
+from random import random
 from functools import reduce
 import numpy as np
 import pandas as pd
@@ -32,7 +32,9 @@ class Learn(object):
 
     def simple(self, item_df, response_df):
         
-        know_thresh = 0.8
+        # know_thresh = 0.8
+        # know_thresh = np.random.normal(0.8, 0.2)
+        know_thresh = random() * 0.2 + 0.7
 
         # if reponses is empty return random item
         if response_df.shape[0] == 0:
@@ -66,4 +68,3 @@ class Learn(object):
         print(item_row)
 
         return item_row
-

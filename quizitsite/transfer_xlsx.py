@@ -22,6 +22,7 @@ def main():
     print(df.head())
 
     # add common key
+    df = df.iloc[:, 0:4]
     df.columns = ['question', 'answer', 'tag', 'alternatives']
     df['key'] = df.iloc[:, 0] + "|" + df.iloc[:, 1]
     df = df[df.key.duplicated() == False]
