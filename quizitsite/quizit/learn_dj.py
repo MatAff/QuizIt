@@ -66,6 +66,16 @@ class LearnDJ(object):
         
         return feedback
 
+    def at_to_alt(self, answer, alts):
+        if '@' in answer:
+            add = [answer.replace('@', l) for l in ['o', 'a']]
+            if len(alts) > 0:
+                alts = '|'.join([alts, *add])
+            else:
+                alts = '|'.join(add)
+            print(alts)
+        return alts
+
     def check(self, item_id, given_answer, email):
         # TODO: move none django specific functionality to learn.py
         item = self.get_item_by_id(item_id)
@@ -77,6 +87,13 @@ class LearnDJ(object):
         answer = Format.remove(answer)
         alts = Format.remove(alts)
 
+        # remove accidentally introduced nan
+        alts = alts.replace('^nan', '')
+
+        # add @ variants
+        alts = self.at_to_alt(answer, alts)
+
+        # check answer
         correct = given_answer == answer
         if not correct and (len(alts) > 0):
             for alt in alts.split('|'):
