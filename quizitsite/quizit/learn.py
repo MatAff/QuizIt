@@ -114,7 +114,7 @@ class Learn(object):
         
         # pick item
         item_df = item_df[item_df.prob < know_thresh]
-        item_df = item_df.sort_values('prob', ascending=False)
+        # item_df = item_df.sort_values('prob', ascending=False)
         item_df = item_df[item_df.recent==False]
         item_row = item_df.iloc[0, :]
 
