@@ -49,8 +49,8 @@ class Learn(object):
             mu = 0.0
             mu_run = 0.0
             return {'n':n, 'mu': mu, 'mu_run': mu_run}
-        mu = np.round(item_responses.correct.mean(), 5)
-        resp = item_responses.correct.values
+        mu = np.round(item_responses.correct.mean(), 5)        
+        resp = item_responses.correct.astype('int').values
         mu_run = reduce(lambda a, b: a * (1-r) + b * r, resp[::-1])
         return {'n':n, 'mu': mu, 'mu_run': mu_run}
 
@@ -67,7 +67,13 @@ class Learn(object):
         r = self.run_discount
         get_item_stats = lambda k: self.compute_item_stats(k, response_df, r)
         item_stats = item_df.key.apply(get_item_stats)
-        item_df = pd.concat([item_df, item_stats.apply(pd.Series)], axis=1)
+        item_stats_df = item_stats.apply(pd.Series)
+        print(item_df.shape)
+        item_df = pd.concat([item_df, item_stats_df], axis=1)
+        item_df['mu'] = self.order_retainer(item_df['mu'])
+        item_df['mu_run'] = self.order_retainer(item_df['mu_run'])
+        print(item_df.shape)
+        print(item_df.head())
 
         # compute near stats
         item_df = self.add_near_mu(item_df, 5)
@@ -81,8 +87,6 @@ class Learn(object):
 
     def simple(self, item_df, response_df):
         
-        all_items = item_df
-
         # vary know threshold
         rand_range = lambda low, high: random() * (high - low) + low
         know_thresh = rand_range(self.know_thresh_low, self.know_thresh_high)
@@ -95,6 +99,8 @@ class Learn(object):
 
         # add item statistics
         item_df = self.add_item_stats(item_df, response_df)
+
+        all_items = item_df
 
         # sometimes pick random known
         pick_known_prob = 0.15
@@ -114,8 +120,10 @@ class Learn(object):
 
         # debug (print item around chosen item)
         print(item_row.key)
-        chunk = self.get_chunk(all_items, 'key', item_row.key, 15)
-        print(chunk)
+        chunk = self.get_chunk(all_items, 'key', item_row.key, 50)
+        with pd.option_context('display.max_columns', None, 'display.max_rows', None):
+            cols = ['key', 'recent', 'prob', 'n', 'mu', 'mu_run', 'mu_near']
+            print(chunk[cols])
 
         return item_row
 
