@@ -14,13 +14,19 @@ class Format(object):
     def remove_punc(t):
         punc = '?!,.()'
         for e in punc:
-            t = t.replace(e[0], "")
+            t = t.replace(e[0], '')
         return t
 
     @staticmethod
-    def remove(t, punc=True, accents=True):
+    def lower(t):
+        return t.lower()
+
+    @staticmethod
+    def remove(t, punc=True, accents=True, lower=True):
         if punc:
             t = Format.remove_punc(t)
         if accents:
             t = Format.remove_accents(t)
+        if lower:
+            t = Format.lower(t)
         return t
