@@ -7,6 +7,12 @@ from quizit.format import Format
 from quizit.learn import Learn
 
 class LearnDJ(object):
+    """Interface between django and learn.py
+
+    Functions in this class should connect django view, the db
+    and Learn functionality. All non django related functionality 
+    should live in Learn.
+    """
 
     def get_item(self, user_email):
         return self.get_simple_smart_item(user_email)
@@ -45,7 +51,6 @@ class LearnDJ(object):
         # pick item
         learn = Learn() 
         item_row = learn.simple(items_df, responses_df)
-        print(item_row)
         picked_item = Item.objects.get(key=item_row['key'])
         
         return picked_item
@@ -62,14 +67,23 @@ class LearnDJ(object):
         return feedback
 
     def check(self, item_id, given_answer, email):
+        # TODO: move none django specific functionality to learn.py
         item = self.get_item_by_id(item_id)
         answer = item.answer
+        alts = item.alts
         
         # remove punctuation
         given_answer = Format.remove(given_answer)
         answer = Format.remove(answer)
+        alts = Format.remove(alts)
 
         correct = given_answer == answer
+        if not correct and (len(alts) > 0):
+            for alt in alts.split('|'):
+                if given_answer == alt:
+                    print('used alternative')
+                    correct = True
+                    break # out of for loop if one of alternative is correct
         self.save_response(item_id, correct, email)
         
         feedback = self.create_feedback(correct, item, given_answer)
@@ -77,7 +91,6 @@ class LearnDJ(object):
         return correct, feedback
 
     def save_response(self, item_id, correct, email):
-        print('saving!')
         
         # get item 
         i = self.get_item_by_id(item_id)

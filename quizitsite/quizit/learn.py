@@ -58,23 +58,15 @@ class Learn(object):
         ser = df[col]
         ind = ser[ser==val].index[0]
         pos = df.index.get_loc(ind)
+        start_pos = max(0, (pos - n))
+        end_pos = (pos + n + 1)
         if db:
-            print(col)
-            print(val)
-            print(pos)
-            print(df.shape)
-            print(df.iloc[(pos - n): (pos + n + 1)])
-        return df.iloc[max(0,(pos - n)): (pos + n + 1)]
+            print(pos, start_pos, end_pos)
+        return df.iloc[start_pos:end_pos]
 
-    def compute_near_mu(self, k, item_df, n, db=False):
+    def compute_near_mu(self, k, item_df, n):
         min_req_responses = 3
-
-
-        chunk = self.get_chunk(item_df, 'key', k, n, db)
-        if db:
-            print('printing chunk')
-            print(chunk)
-
+        chunk = self.get_chunk(item_df, 'key', k, n)
         chunk = chunk[chunk.n > 0]
         if len(chunk.index) < min_req_responses : return 0.0 
         return chunk.mu.mean()
@@ -87,8 +79,11 @@ class Learn(object):
 
     def simple(self, item_df, response_df):
         
+        all_items = item_df
+
         # vary know threshold
-        know_thresh = random() * 0.15 + 0.8
+        know_thresh = random() * 0.2 + 0.7 # 0.7-0.9
+        print(f'current know threshold: {know_thresh}')
 
         # if reponses is empty return random item
         if response_df.shape[0] == 0:
@@ -101,7 +96,6 @@ class Learn(object):
 
         # compute current probabiliy
         response_df = response_df.sort_values(by='ts', ascending=False)
-        print(response_df)
 
         # item count
         item_df = self.add_count(item_df, response_df)
@@ -119,15 +113,25 @@ class Learn(object):
         item_df['prob'] = item_df['mu_run']
         item_df.loc[item_df.n == 0,'prob'] = item_df.loc[item_df.n ==0, 'mu_near']
 
-        # debug
-        self.compute_near_mu(item_df.key[0], item_df, 2, db=True)
-        print(item_df.head(50))
-
+        # sometime pick random known
+        pick_known_prob = 0.15
+        if random() < pick_known_prob:
+            item_df = item_df[item_df.prob >= know_thresh]
+            nr_items = len(item_df.index)
+            if nr_items > 0:
+                print('picking random known item')
+                pos = randint(0, nr_items - 1)
+                return item_df.iloc[pos, :]
+        
         # pick item
         item_df = item_df[item_df.prob < know_thresh]
         item_df = item_df.sort_values('prob', ascending=False)
         item_df = item_df[(item_df.key.isin(recent_items))==False]
         item_row = item_df.iloc[0, :]
-        # print(item_row)
+
+        # debug (print item around chosen item)
+        print(item_row.key)
+        chunk = self.get_chunk(all_items, 'key', item_row.key, 15)
+        print(chunk)
 
         return item_row
