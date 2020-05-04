@@ -62,3 +62,14 @@ class Response(models.Model):
                 'ts': self.ts, 
                 'user': self.user
                 }
+
+class Preselect(models.Model):
+
+    key = models.CharField(max_length=801)
+    user = models.CharField(max_length=600)
+
+    def __repr__(self):
+        return '; '.join([self.user, self.key])
+
+    def __str__(self):
+        return self.__repr__()

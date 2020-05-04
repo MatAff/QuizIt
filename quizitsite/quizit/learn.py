@@ -85,7 +85,7 @@ class Learn(object):
 
         return item_df
 
-    def simple(self, item_df, response_df):
+    def simple(self, item_df, response_df, exclude=None):
         
         # vary know threshold
         rand_range = lambda low, high: random() * (high - low) + low
@@ -99,6 +99,10 @@ class Learn(object):
 
         # add item statistics
         item_df = self.add_item_stats(item_df, response_df)
+
+        # mark exclude as recent
+        if exclude is not None:
+            item_df.loc[item_df.key.isin(exclude), 'recent'] = True
 
         all_items = item_df
 
@@ -120,7 +124,7 @@ class Learn(object):
 
         # debug (print item around chosen item)
         print(item_row.key)
-        chunk = self.get_chunk(all_items, 'key', item_row.key, 50)
+        chunk = self.get_chunk(all_items, 'key', item_row.key, 5)
         with pd.option_context('display.max_columns', None, 'display.max_rows', None):
             cols = ['key', 'recent', 'prob', 'n', 'mu', 'mu_run', 'mu_near']
             print(chunk[cols])

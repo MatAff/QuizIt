@@ -1,10 +1,20 @@
 
 import random
 import pandas as pd
+import threading
 
-from quizit.models import Item, Response
+from quizit.models import Item, Response, Preselect
 from quizit.format import Format
 from quizit.learn import Learn
+
+
+import time
+
+def test_delayed_action():
+    print('waiting')
+    time.sleep(20)
+    print('delayed')
+
 
 class LearnDJ(object):
     """Interface between django and learn.py
@@ -15,7 +25,7 @@ class LearnDJ(object):
     """
 
     def get_item(self, user_email):
-        return self.get_simple_smart_item(user_email)
+        return self.get_simple_smart_item_async(user_email)
 
     def get_item_by_id(self, item_id):
         return Item.objects.get(pk=item_id)
@@ -42,7 +52,40 @@ class LearnDJ(object):
         item_df = pd.DataFrame(item_list)
         return item_df
 
-    def get_simple_smart_item(self, user_email):
+    def do_preselect(self, user_email, exclude):
+        picked_item = self.get_simple_smart_item(user_email, exclude)
+        picked_key = picked_item.key
+        preselect = Preselect(key=picked_key,
+                              user=user_email)
+        preselect.save()
+        print('saved preselected item')
+
+    def get_simple_smart_item_async(self, user_email):
+
+        # get preselected items
+        preselect = Preselect.objects.filter(user=user_email)
+
+        # load or select item
+        if len(preselect) > 0:
+            print('preselected item') 
+            print(preselect)
+            picked_key = key=preselect[0].key
+            picked_item = Item.objects.get(key=picked_key)
+            Preselect.objects.filter(user=user_email).delete()
+        else:
+            print('new item')
+            picked_item = self.get_simple_smart_item(user_email)
+            picked_key = picked_item.key
+
+        # initiate preselection
+        Preselect.objects.filter(user=user_email).delete()
+        t = threading.Thread(target=self.do_preselect, args=[user_email, picked_key]) 
+        # t.setDaemon(False)  
+        t.start()
+
+        return picked_item
+        
+    def get_simple_smart_item(self, user_email, exclude=None):
         
         # get all items and user responses
         items_df = self.get_item_df()
@@ -50,9 +93,18 @@ class LearnDJ(object):
 
         # pick item
         learn = Learn() 
-        item_row = learn.simple(items_df, responses_df)
+        exclude = ['to work|trabajar']
+        item_row = learn.simple(items_df, responses_df, exclude)
         picked_item = Item.objects.get(key=item_row['key'])
         
+        # this slows down
+        # test_delayed_action()
+
+        # this does not slow down
+        # t = threading.Thread(target=test_delayed_action, args=[]) 
+        # # t.setDaemon(False)  
+        # t.start()
+
         return picked_item
 
     def create_feedback(self, correct, item, answer):
