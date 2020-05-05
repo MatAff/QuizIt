@@ -69,7 +69,7 @@ class LearnDJ(object):
         if len(preselect) > 0:
             print('preselected item') 
             print(preselect)
-            picked_key = key=preselect[0].key
+            picked_key = preselect[len(preselect)-1].key
             picked_item = Item.objects.get(key=picked_key)
             Preselect.objects.filter(user=user_email).delete()
         else:

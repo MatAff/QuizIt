@@ -20,6 +20,7 @@
 
 				{% csrf_token %}
 				<label name="question"> {{ item.question }} </label><br><br>
+				<input class="item" name="item_key" type="hidden" value="{{ item.key }}" > 
 				<input class="item" name="given_answer" type="text" value="" autocomplete="off" autofocus> 
 
 			</form>

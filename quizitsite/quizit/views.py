@@ -22,6 +22,8 @@ def basic(request, item_id=None):
 
     if request.method == 'POST':
         given_answer = request.POST['given_answer']
+        print('this is it!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1')
+        print(request.POST)
         _, feedback = LearnDJ().check(item_id, given_answer, request.user.email)
         item = LearnDJ().get_item(request.user.email)
         return render(request, 'quizit/basic.html', {'item': item, 'feedback': feedback})
