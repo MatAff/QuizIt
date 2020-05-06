@@ -30,6 +30,9 @@ class LearnDJ(object):
     def get_item_by_id(self, item_id):
         return Item.objects.get(pk=item_id)
 
+    def get_item_by_key(self, item_key):
+        return Item.objects.get(key=item_key)
+
     def get_random_item(self, n=20):
         item_id = random.randint(0, n)
         return self.get_item_by_id(item_id)
@@ -128,9 +131,9 @@ class LearnDJ(object):
             print(alts)
         return alts
 
-    def check(self, item_id, given_answer, email):
+    def check(self, item_key, given_answer, email):
         # TODO: move none django specific functionality to learn.py
-        item = self.get_item_by_id(item_id)
+        item = self.get_item_by_key(item_key)
         answer = item.answer
         alts = item.alts
         
@@ -153,16 +156,16 @@ class LearnDJ(object):
                     print('used alternative')
                     correct = True
                     break # out of for loop if one of alternative is correct
-        self.save_response(item_id, correct, email)
+        self.save_response(item_key, correct, email)
         
         feedback = self.create_feedback(correct, item, given_answer)
 
         return correct, feedback
 
-    def save_response(self, item_id, correct, email):
+    def save_response(self, item_key, correct, email):
         
         # get item 
-        i = self.get_item_by_id(item_id)
+        i = self.get_item_by_key(item_key)
 
         # create response
         r = Response()
