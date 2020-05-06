@@ -14,22 +14,38 @@
 	</head>
 
 	<body>
-		<div class="item">
-			<br><br><br>
 
+		<br>
+
+		<div class="item">
 			<form method="post" class="item">
 
 				{% csrf_token %}
+
 				<label name="question"> {{ item.question }} </label><br><br>
-				<input class="item" name="item_key" type="hidden" value="{{ item.key }}" > 
+				<input class="item" name="post_type" type="hidden" value="item_submit"> 
+				<input class="item" name="item_key" type="hidden" value="{{ item.key }}"> 
 				<input class="item" name="given_answer" type="text" value="" autocomplete="off" autofocus> 
 
 			</form>
 		</div>
+
 		<br>
-		<div class="feedback">
-				{{ feedback|linebreaks }}	
-		</div>
+		
+		<div class="feedback">		
+			<form method="post" class="feedback">
+				
+				{% csrf_token %}
+
+				<label name="feedback"> {{ feedback|linebreaks }} </label>
+				<input class="item" name="post_type" type="hidden" value="flag"> 
+				<input class="feedback" name="feedback" type="hidden" value="{{ feedback|linebreaks }}"><br>
+				<input class="feedback" name="prev_item_key" type="hidden" value="{{ prev_item_key }}"><br>
+				<button type="flag" value="flag">Flag</button>
+				
+			</form>
+		</div>	
+
 	</body>
 
 	{% endblock content %}

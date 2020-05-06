@@ -73,3 +73,17 @@ class Preselect(models.Model):
 
     def __str__(self):
         return self.__repr__()
+
+class Message(models.Model):
+
+    user = models.CharField(max_length=600)
+    ts = models.DateTimeField(default=timezone.now)    
+    key = models.CharField(max_length=801)
+    type = models.CharField(max_length=801)
+    text = models.CharField(max_length=800)
+
+    def __repr__(self):
+        return '; '.join([self.user, str(self.ts), self.key, self.type, self.text])
+
+    def __str__(self):
+        return self.__repr__()
