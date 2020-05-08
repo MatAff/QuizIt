@@ -11,6 +11,7 @@ class Learn(object):
     know_thresh_high = 0.9
     recent_n = 5
     run_discount = 0.75
+    pick_known_prob = 0.15
 
     def get_recent_items(self, sorted_response_df, n):
         n = min(len(sorted_response_df.index), n)
@@ -68,12 +69,9 @@ class Learn(object):
         get_item_stats = lambda k: self.compute_item_stats(k, response_df, r)
         item_stats = item_df.key.apply(get_item_stats)
         item_stats_df = item_stats.apply(pd.Series)
-        print(item_df.shape)
         item_df = pd.concat([item_df, item_stats_df], axis=1)
         item_df['mu'] = self.order_retainer(item_df['mu'])
         item_df['mu_run'] = self.order_retainer(item_df['mu_run'])
-        print(item_df.shape)
-        print(item_df.head())
 
         # compute near stats
         item_df = self.add_near_mu(item_df, 5)
@@ -84,6 +82,46 @@ class Learn(object):
         item_df.loc[fill,'prob'] = item_df.loc[fill, 'mu_near']
 
         return item_df
+
+    def get_know_thresh(self, verbose=False):
+        rand_range = lambda low, high: random() * (high - low) + low
+        know_thresh = rand_range(self.know_thresh_low, self.know_thresh_high)
+        if verbose:
+            print(f'current know threshold: {know_thresh}')
+        return know_thresh
+
+    def simple_n(self, item_df, response_df, n, exclude=None):
+        
+        know_thresh = self.get_know_thresh(True)
+        
+        # if reponses is small return random items
+        if response_df.shape[0] < n:
+            rows = np.randint(0, 2 * n, n)
+            return item_df.iloc[rows, :]
+
+        # add item statistics
+        item_df = self.add_item_stats(item_df, response_df)
+
+        # mark exclude as recent
+        if exclude is not None:
+            item_df.loc[item_df.key.isin(exclude), 'recent'] = True
+
+        # retain known items
+        known_items = item_df[item_df.prob >= know_thresh]
+                
+        # pick item
+        item_df = item_df[item_df.prob < know_thresh]
+        item_df = item_df[item_df.recent==False]
+        picked_items = item_df.iloc[0:n, :]
+
+        if know_thresh.shape[0] > 10:
+            for r in range(picked_items.shape[0]):
+                if random() < self.pick_known_prob:
+                    print('picking random known item')
+                    pos = randint(0, known_items.shape[0] - 1)
+                    picked_items.iloc[r, :] = known_items.iloc[pos, :]
+
+        return picked_items
 
     def simple(self, item_df, response_df, exclude=None):
         

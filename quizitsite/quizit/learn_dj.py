@@ -45,6 +45,7 @@ class LearnDJ(object):
 
     def get_user_responses_df(self, user_email):
         responses = Response.objects.filter(user=user_email)
+        print(f'len:{len(responses)}')
         resp_list = [r.to_dict() for r in responses]
         resp_df = pd.DataFrame(resp_list)
         return resp_df
@@ -54,6 +55,9 @@ class LearnDJ(object):
         item_list = [r.to_dict() for r in items]
         item_df = pd.DataFrame(item_list)
         return item_df
+
+    def get_recent_responses(self, user_email, n=5):
+        return Response.objects.filter(user=user_email).order_by('-id')[:n]
 
     def do_preselect(self, user_email, exclude):
         picked_item = self.get_simple_smart_item(user_email, exclude)
@@ -65,8 +69,16 @@ class LearnDJ(object):
 
     def get_simple_smart_item_async(self, user_email):
 
+        # recent responses
+        recent = self.get_recent_responses(user_email)
+        recent_keys = [r.key for r in recent]
+        print(f'recent: {"; ".join(recent_keys)}')
+        # print('recent'); print(recent_keys)
+
         # get preselected items
         preselect = Preselect.objects.filter(user=user_email)
+        preselect_keys = [p.key for p in preselect]
+        print(f'preselected: {"; ".join(preselect_keys)}')
 
         # load or select item
         if len(preselect) > 0:
