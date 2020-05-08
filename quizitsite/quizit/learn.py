@@ -114,7 +114,7 @@ class Learn(object):
         item_df = item_df[item_df.recent==False]
         picked_items = item_df.iloc[0:n, :]
 
-        if know_thresh.shape[0] > 10:
+        if known_items.shape[0] > 10:
             for r in range(picked_items.shape[0]):
                 if random() < self.pick_known_prob:
                     print('picking random known item')
@@ -123,51 +123,51 @@ class Learn(object):
 
         return picked_items
 
-    def simple(self, item_df, response_df, exclude=None):
+    # def simple(self, item_df, response_df, exclude=None):
         
-        # vary know threshold
-        rand_range = lambda low, high: random() * (high - low) + low
-        know_thresh = rand_range(self.know_thresh_low, self.know_thresh_high)
-        print(f'current know threshold: {know_thresh}')
+    #     # vary know threshold
+    #     rand_range = lambda low, high: random() * (high - low) + low
+    #     know_thresh = rand_range(self.know_thresh_low, self.know_thresh_high)
+    #     print(f'current know threshold: {know_thresh}')
 
-        # if reponses is empty return random item
-        if response_df.shape[0] == 0:
-            random_int = randint(0, 10)
-            return item_df.iloc[random_int, :]
+    #     # if reponses is empty return random item
+    #     if response_df.shape[0] == 0:
+    #         random_int = randint(0, 10)
+    #         return item_df.iloc[random_int, :]
 
-        # add item statistics
-        item_df = self.add_item_stats(item_df, response_df)
+    #     # add item statistics
+    #     item_df = self.add_item_stats(item_df, response_df)
 
-        # mark exclude as recent
-        if exclude is not None:
-            item_df.loc[item_df.key.isin(exclude), 'recent'] = True
+    #     # mark exclude as recent
+    #     if exclude is not None:
+    #         item_df.loc[item_df.key.isin(exclude), 'recent'] = True
 
-        all_items = item_df
+    #     all_items = item_df
 
-        # sometimes pick random known
-        pick_known_prob = 0.15
-        if random() < pick_known_prob:
-            item_df = item_df[item_df.prob >= know_thresh]
-            nr_items = len(item_df.index)
-            if nr_items > 0:
-                print('picking random known item')
-                pos = randint(0, nr_items - 1)
-                return item_df.iloc[pos, :]
+    #     # sometimes pick random known
+    #     pick_known_prob = 0.15
+    #     if random() < pick_known_prob:
+    #         item_df = item_df[item_df.prob >= know_thresh]
+    #         nr_items = len(item_df.index)
+    #         if nr_items > 0:
+    #             print('picking random known item')
+    #             pos = randint(0, nr_items - 1)
+    #             return item_df.iloc[pos, :]
         
-        # pick item
-        item_df = item_df[item_df.prob < know_thresh]
-        # item_df = item_df.sort_values('prob', ascending=False)
-        item_df = item_df[item_df.recent==False]
-        item_row = item_df.iloc[0, :]
+    #     # pick item
+    #     item_df = item_df[item_df.prob < know_thresh]
+    #     # item_df = item_df.sort_values('prob', ascending=False)
+    #     item_df = item_df[item_df.recent==False]
+    #     item_row = item_df.iloc[0, :]
 
-        # debug (print item around chosen item)
-        print(item_row.key)
-        chunk = self.get_chunk(all_items, 'key', item_row.key, 5)
-        with pd.option_context('display.max_columns', None, 'display.max_rows', None):
-            cols = ['key', 'recent', 'prob', 'n', 'mu', 'mu_run', 'mu_near']
-            print(chunk[cols])
+    #     # debug (print item around chosen item)
+    #     print(item_row.key)
+    #     chunk = self.get_chunk(all_items, 'key', item_row.key, 5)
+    #     with pd.option_context('display.max_columns', None, 'display.max_rows', None):
+    #         cols = ['key', 'recent', 'prob', 'n', 'mu', 'mu_run', 'mu_near']
+    #         print(chunk[cols])
 
-        return item_row
+    #     return item_row
 
     # # compute_item_mean, compute_item_mean_running, add_mu, add_w_mu
     # def compute_item_mean(self, key, sorted_response_df):

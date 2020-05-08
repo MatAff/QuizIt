@@ -23,8 +23,6 @@ def basic(request, item_id=None):
 
     if request.method == 'POST':
         
-        print(request.POST)
-
         if request.POST['post_type'] == 'item_submit':
 
             # standard

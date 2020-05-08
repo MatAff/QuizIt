@@ -59,13 +59,15 @@ class LearnDJ(object):
     def get_recent_responses(self, user_email, n=5):
         return Response.objects.filter(user=user_email).order_by('-id')[:n]
 
-    def do_preselect(self, user_email, exclude):
-        picked_item = self.get_simple_smart_item(user_email, exclude)
-        picked_key = picked_item.key
-        preselect = Preselect(key=picked_key,
-                              user=user_email)
-        preselect.save()
-        print('saved preselected item')
+    def do_preselect(self, user_email, exclude=None):
+        item_keys = self.get_smart_item_keys(user_email, 5, exclude)
+        print(f'item_key for preselect{"; ".join(item_keys)}')
+        
+        # remove current with fresh ones
+        Preselect.objects.filter(user=user_email).delete()
+        for key in item_keys:
+            preselect = Preselect(key=key, user=user_email)
+            preselect.save()
 
     def get_simple_smart_item_async(self, user_email):
 
@@ -73,54 +75,50 @@ class LearnDJ(object):
         recent = self.get_recent_responses(user_email)
         recent_keys = [r.key for r in recent]
         print(f'recent: {"; ".join(recent_keys)}')
-        # print('recent'); print(recent_keys)
 
         # get preselected items
         preselect = Preselect.objects.filter(user=user_email)
         preselect_keys = [p.key for p in preselect]
         print(f'preselected: {"; ".join(preselect_keys)}')
 
-        # load or select item
-        if len(preselect) > 0:
-            print('preselected item') 
-            print(preselect)
-            picked_key = preselect[len(preselect)-1].key
-            picked_item = Item.objects.get(key=picked_key)
-            Preselect.objects.filter(user=user_email).delete()
+        # exclude recent items
+        preselect_keys = [k for k in preselect_keys if k not in recent_keys]
+        print(f'preselected recent removed: {"; ".join(preselect_keys)}')
+
+        # kick off preselection
+        if len(preselect_keys) < 5:
+            t = threading.Thread(target=self.do_preselect, args=[user_email]) 
+            t.start()
+
+        if len(preselect_keys) > 0:
+            picked_key = preselect_keys[0]
         else:
-            print('new item')
-            picked_item = self.get_simple_smart_item(user_email)
-            picked_key = picked_item.key
+            print('WARNING: preselection was empty.')
+            picked_key = self.get_smart_item_keys(self, user_email, 1)[0]
 
-        # initiate preselection
-        Preselect.objects.filter(user=user_email).delete()
-        t = threading.Thread(target=self.do_preselect, args=[user_email, picked_key]) 
-        # t.setDaemon(False)  
-        t.start()
+        return Item.objects.get(key=picked_key)
 
-        return picked_item
+    def get_smart_item_keys(self, user_email, n, exclude=None):
         
-    def get_simple_smart_item(self, user_email, exclude=None):
+        item_df = self.get_item_df()
+        response_df = self.get_user_responses_df(user_email)
+
+        picked_items = Learn().simple_n(item_df, response_df, n, exclude)
+        return picked_items.key.to_list()
+
+
+    # def get_simple_smart_item(self, user_email, exclude=None):
         
-        # get all items and user responses
-        items_df = self.get_item_df()
-        responses_df = self.get_user_responses_df(user_email)
+    #     # get all items and user responses
+    #     items_df = self.get_item_df()
+    #     responses_df = self.get_user_responses_df(user_email)
 
-        # pick item
-        learn = Learn() 
-        exclude = ['to work|trabajar']
-        item_row = learn.simple(items_df, responses_df, exclude)
-        picked_item = Item.objects.get(key=item_row['key'])
-        
-        # this slows down
-        # test_delayed_action()
+    #     # pick item
+    #     learn = Learn() 
+    #     item_row = learn.simple(items_df, responses_df, exclude)
+    #     picked_item = Item.objects.get(key=item_row['key'])
 
-        # this does not slow down
-        # t = threading.Thread(target=test_delayed_action, args=[]) 
-        # # t.setDaemon(False)  
-        # t.start()
-
-        return picked_item
+    #     return picked_item
 
     def create_feedback(self, correct, item, answer):
         # TODO: move this in the learn as this is not DJ specific
