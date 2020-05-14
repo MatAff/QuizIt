@@ -3,18 +3,16 @@ import random
 import pandas as pd
 import threading
 
-from quizit.models import Item, Response, Preselect
+from quizit.models import Item, Response, Preselect, Message
 from quizit.format import Format
 from quizit.learn import Learn
 
+# import time
 
-import time
-
-def test_delayed_action():
-    print('waiting')
-    time.sleep(20)
-    print('delayed')
-
+# def test_delayed_action():
+#     print('waiting')
+#     time.sleep(20)
+#     print('delayed')
 
 class LearnDJ(object):
     """Interface between django and learn.py
@@ -50,6 +48,9 @@ class LearnDJ(object):
         resp_df = pd.DataFrame(resp_list)
         return resp_df
 
+    def get_flagged(self):
+        return Message.objects.filter(type='flag')
+
     def get_item_df(self):
         items = Item.objects.all()
         item_list = [r.to_dict() for r in items]
@@ -71,6 +72,11 @@ class LearnDJ(object):
 
     def get_simple_smart_item_async(self, user_email):
 
+        # get flagged responses
+        flagged = self.get_flagged()
+        flagged_keys = [f.key for f in flagged]
+        print(f'flagged: {"; ".join(flagged_keys)}')
+
         # recent responses
         recent = self.get_recent_responses(user_email)
         recent_keys = [r.key for r in recent]
@@ -87,14 +93,14 @@ class LearnDJ(object):
 
         # kick off preselection
         if len(preselect_keys) < 5:
-            t = threading.Thread(target=self.do_preselect, args=[user_email]) 
+            t = threading.Thread(target=self.do_preselect, args=[user_email, flagged_keys]) 
             t.start()
 
         if len(preselect_keys) > 0:
             picked_key = preselect_keys[0]
         else:
             print('WARNING: preselection was empty.')
-            picked_key = self.get_smart_item_keys(self, user_email, 1)[0]
+            picked_key = self.get_smart_item_keys(self, user_email, 1, flagged_keys)[0]
 
         return Item.objects.get(key=picked_key)
 
