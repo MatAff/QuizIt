@@ -81,6 +81,10 @@ class Learn(object):
         fill = item_df.n == 0
         item_df.loc[fill,'prob'] = item_df.loc[fill, 'mu_near']
 
+        # word score
+        word_score = item_df.prob.sum()
+        print(f'word score: {word_score}')
+        
         return item_df
 
     def get_know_thresh(self, verbose=False):

@@ -30,3 +30,19 @@ class Format(object):
         if lower:
             t = Format.lower(t)
         return t
+    
+    @staticmethod
+    def add_accents(t):
+        acc_list = [
+            ('a^', 'â'), ('a\\', 'à'), ('a/', 'á'),
+            ('e^', 'ê'), ('e\\', 'è'), ('e/', 'é'),
+            ('i^', 'î'), ('i\\', 'ì'), ('i/', 'í'),
+            ('o/', 'ó'), ('c5', 'ç'), 
+            ('u/', 'ú'), ('u^', 'û'), ('u\\', 'ù'),
+            ('n~', 'ñ')
+        ]
+
+        for e in acc_list:
+            t = t.replace(e[0], e[1])
+        #  from string import maketrans
+        return t

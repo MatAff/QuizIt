@@ -43,7 +43,6 @@ class LearnDJ(object):
 
     def get_user_responses_df(self, user_email):
         responses = Response.objects.filter(user=user_email)
-        print(f'len:{len(responses)}')
         resp_list = [r.to_dict() for r in responses]
         resp_df = pd.DataFrame(resp_list)
         return resp_df
@@ -62,7 +61,7 @@ class LearnDJ(object):
 
     def do_preselect(self, user_email, exclude=None):
         item_keys = self.get_smart_item_keys(user_email, 5, exclude)
-        print(f'item_key for preselect{"; ".join(item_keys)}')
+        # print(f'item_key for preselect{"; ".join(item_keys)}')
         
         # remove current with fresh ones
         Preselect.objects.filter(user=user_email).delete()
@@ -144,7 +143,6 @@ class LearnDJ(object):
                 alts = '|'.join([alts, *add])
             else:
                 alts = '|'.join(add)
-            print(alts)
         return alts
 
     def check(self, item_key, given_answer, email):
@@ -154,9 +152,9 @@ class LearnDJ(object):
         alts = item.alts
         
         # remove punctuation
-        given_answer = Format.remove(given_answer)
-        answer = Format.remove(answer)
-        alts = Format.remove(alts)
+        given_answer = Format.add_accents(given_answer)
+        #answer = Format.remove(answer)
+        #alts = Format.remove(alts)
 
         # remove accidentally introduced nan
         alts = alts.replace('^nan', '')
