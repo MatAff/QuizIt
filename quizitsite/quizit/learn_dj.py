@@ -153,8 +153,8 @@ class LearnDJ(object):
         
         # remove punctuation
         given_answer = Format.add_accents(given_answer)
-        #answer = Format.remove(answer)
-        #alts = Format.remove(alts)
+        answer = Format.remove(answer, accents=False)
+        alts = Format.remove(alts, accents=False)
 
         # remove accidentally introduced nan
         alts = alts.replace('^nan', '')
