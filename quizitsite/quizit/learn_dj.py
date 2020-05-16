@@ -153,6 +153,7 @@ class LearnDJ(object):
         
         # remove punctuation
         given_answer = Format.add_accents(given_answer)
+        given_answer = Format.remove(given_answer, accents=False)
         answer = Format.remove(answer, accents=False)
         alts = Format.remove(alts, accents=False)
 
