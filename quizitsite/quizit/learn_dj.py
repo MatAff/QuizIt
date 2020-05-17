@@ -3,6 +3,7 @@ import random
 import pandas as pd
 import threading
 
+from quizit.text_comparison import TextComparison
 from quizit.models import Item, Response, Preselect, Message
 from quizit.format import Format
 from quizit.learn import Learn
@@ -125,15 +126,25 @@ class LearnDJ(object):
 
     #     return picked_item
 
+    def compare_text(self, given, correct):
+        tc = TextComparison(given, correct)
+        change_count = tc.dist()
+        if change_count / len(correct) < 0.2:
+            change_str = tc.change()
+            change_str = 'Changes: ' + change_str
+            return change_str
+        return ''
+
     def create_feedback(self, correct, item, answer):
         # TODO: move this in the learn as this is not DJ specific
         
         if correct:
             feedback = 'Correct: ' + item.question + ' = ' + item.answer
         else:
+            change_str = self.compare_text(answer, item.answer)
             feedback = 'Nope: ' + item.question + ' = ' + item.answer
             feedback += '\nYou said: ' + answer
-        
+            feedback += '\n' + change_str
         return feedback
 
     def at_to_alt(self, answer, alts):
