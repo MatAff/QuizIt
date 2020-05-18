@@ -85,7 +85,7 @@ class Learn(object):
         word_score = item_df.prob.sum()
         print(f'word score: {word_score}')
         
-        return item_df
+        return item_df, word_score
 
     def get_know_thresh(self, verbose=False):
         rand_range = lambda low, high: random() * (high - low) + low
@@ -104,7 +104,7 @@ class Learn(object):
             return item_df.iloc[rows, :]
 
         # add item statistics
-        item_df = self.add_item_stats(item_df, response_df)
+        item_df, word_score = self.add_item_stats(item_df, response_df)
 
         # mark exclude as recent
         if exclude is not None:
@@ -125,7 +125,7 @@ class Learn(object):
                     pos = randint(0, known_items.shape[0] - 1)
                     picked_items.iloc[r, :] = known_items.iloc[pos, :]
 
-        return picked_items
+        return picked_items, word_score
 
     # def simple(self, item_df, response_df, exclude=None):
         
@@ -140,7 +140,7 @@ class Learn(object):
     #         return item_df.iloc[random_int, :]
 
     #     # add item statistics
-    #     item_df = self.add_item_stats(item_df, response_df)
+    #     item_df, word_score = self.add_item_stats(item_df, response_df)
 
     #     # mark exclude as recent
     #     if exclude is not None:

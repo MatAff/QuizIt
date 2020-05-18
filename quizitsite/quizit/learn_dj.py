@@ -1,4 +1,4 @@
-
+import numpy as np
 import random
 import pandas as pd
 import threading
@@ -65,7 +65,7 @@ class LearnDJ(object):
         # print(f'item_key for preselect{"; ".join(item_keys)}')
         
         # remove current with fresh ones
-        Preselect.objects.filter(user=user_email).delete()
+        Preselect.objects.filter(user=user_email).delete() # this may throw error if preselect is empty
         for key in item_keys:
             preselect = Preselect(key=key, user=user_email)
             preselect.save()
@@ -109,7 +109,17 @@ class LearnDJ(object):
         item_df = self.get_item_df()
         response_df = self.get_user_responses_df(user_email)
 
-        picked_items = Learn().simple_n(item_df, response_df, n, exclude)
+        picked_items, word_score = Learn().simple_n(item_df, response_df, n, exclude)
+
+        # add word score to message
+        scores = Message.objects.filter(user=user_email, type='word_score')
+        if len(scores) > 0:
+            scores.delete()
+        m = Message(user=user_email,
+                    type='word_score',     
+                    text='Your word score:' + str(np.round(word_score, 1)))
+        m.save()
+
         return picked_items.key.to_list()
 
 

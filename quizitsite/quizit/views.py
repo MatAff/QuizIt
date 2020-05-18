@@ -21,6 +21,14 @@ def about(request):
 @login_required
 def basic(request, item_id=None):
 
+    # load potential word scores
+    score_text = ''
+    scores = Message.objects.filter(user=request.user.email, type='word_score')
+    if len(scores) > 0:
+        score_text = scores[0].text
+        print('score_text')
+        print(score_text)
+
     if request.method == 'POST':
         
         if request.POST['post_type'] == 'item_submit':
@@ -32,7 +40,10 @@ def basic(request, item_id=None):
     
             item = LearnDJ().get_item(request.user.email)
 
-            arg_dict =  {'item': item, 'feedback': feedback, 'prev_item_key': prev_item_key}
+            arg_dict =  {'item': item, 
+                         'feedback': feedback, 
+                         'prev_item_key': prev_item_key, 
+                         'score_text': score_text}
             return render(request, 'quizit/basic.html', arg_dict)
         
         else:
@@ -42,12 +53,15 @@ def basic(request, item_id=None):
             m = Message(user=request.user.email,
                         key=request.POST['prev_item_key'],
                         type='flag',
-                        text=request.POST['feedback'])
+                        text=request.POST['flag_message'])
             m.save()
 
             # TODO: fix side effect this also gets a new item
 
     item = LearnDJ().get_item(request.user.email)
 
-    arg_dict = {'item': item, 'feedback': '', 'prev_item_key': ''}
+    arg_dict = {'item': item, 
+                'feedback': '', 
+                'prev_item_key': '', 
+                'score_text': score_text}
     return render(request, 'quizit/basic.html', arg_dict)
