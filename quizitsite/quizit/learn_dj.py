@@ -48,8 +48,12 @@ class LearnDJ(object):
         resp_df = pd.DataFrame(resp_list)
         return resp_df
 
-    def get_flagged(self):
-        return Message.objects.filter(type='flag')
+    def get_flagged(self, as_table=False):
+        flagged = Message.objects.filter(type='flag')
+        if as_table:
+            print(flagged)
+            flagged = '\n'.join([str(f) for f in flagged])
+        return flagged
 
     def get_item_df(self):
         items = Item.objects.all()
@@ -139,7 +143,7 @@ class LearnDJ(object):
     def compare_text(self, given, correct):
         tc = TextComparison(given, correct)
         change_count = tc.dist()
-        if change_count / len(correct) < 0.2:
+        if change_count < 5:
             change_str = tc.change()
             change_str = 'Changes: ' + change_str
             return change_str

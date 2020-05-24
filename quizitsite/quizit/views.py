@@ -9,7 +9,6 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from quizit.learn_dj import LearnDJ
-
 from quizit.models import Message
 
 def index(request):
@@ -17,6 +16,11 @@ def index(request):
 
 def about(request):
     return render(request, 'quizit/about.html')
+
+@login_required
+def flagged(request):
+    flagged_text = LearnDJ().get_flagged(True)
+    return render(request, 'quizit/flagged.html', {'flagged_text': flagged_text})
 
 @login_required
 def basic(request, item_id=None):

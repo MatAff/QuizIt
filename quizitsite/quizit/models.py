@@ -82,6 +82,9 @@ class Message(models.Model):
     type = models.CharField(max_length=801)
     text = models.CharField(max_length=800)
 
+    def to_list(self):
+        return [self.user, str(self.ts), self.key, self.type, self.text]
+
     def __repr__(self):
         return '; '.join([self.user, str(self.ts), self.key, self.type, self.text])
 

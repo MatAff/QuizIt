@@ -26,4 +26,5 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', include('quizit.urls')),
     path('quizit/', include('quizit.urls')),
+    path('flagged/', include('quizit.urls')),
 ]
