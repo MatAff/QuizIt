@@ -15,7 +15,7 @@ print(os.listdir(base_path))
 path = os.path.join(base_path, 'spanish.xlsx')
 topic = 'spanish'
 
-def main():
+def transfer_xlsx():
 
     # get content
     df = pd.read_excel(path)
@@ -42,8 +42,4 @@ def main():
         print(item.question)
         item.save()
 
-
-# if __name__ == '__main__':
-#     main()
-
-main()
+# MA: main() disabled, need to call transfer_xlsx() to initiate transfer

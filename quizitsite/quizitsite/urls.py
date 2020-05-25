@@ -27,4 +27,6 @@ urlpatterns = [
     path('', include('quizit.urls')),
     path('quizit/', include('quizit.urls')),
     path('flagged/', include('quizit.urls')),
+    path('update-content/', include('quizit.urls')),
+    path('remove-flagged/', include('quizit.urls')),
 ]

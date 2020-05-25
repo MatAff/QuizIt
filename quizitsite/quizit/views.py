@@ -69,3 +69,17 @@ def basic(request, item_id=None):
                 'prev_item_key': '', 
                 'score_text': score_text}
     return render(request, 'quizit/basic.html', arg_dict)
+
+@login_required
+def update_content(request):
+
+    LearnDJ().update_content()
+
+    # TODO: redirect
+
+@login_required
+def remove_flagged(request):
+
+    LearnDJ().remove_flagged()
+
+    # TODO: redirect

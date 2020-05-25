@@ -8,6 +8,8 @@ from quizit.models import Item, Response, Preselect, Message
 from quizit.format import Format
 from quizit.learn import Learn
 
+from transfer_xlsx import transfer_xlsx
+
 # import time
 
 # def test_delayed_action():
@@ -51,7 +53,6 @@ class LearnDJ(object):
     def get_flagged(self, as_table=False):
         flagged = Message.objects.filter(type='flag')
         if as_table:
-            print(flagged)
             flagged = '\n'.join([str(f) for f in flagged])
         return flagged
 
@@ -79,21 +80,21 @@ class LearnDJ(object):
         # get flagged responses
         flagged = self.get_flagged()
         flagged_keys = [f.key for f in flagged]
-        print(f'flagged: {"; ".join(flagged_keys)}')
+        # print(f'flagged: {"; ".join(flagged_keys)}')
 
         # recent responses
         recent = self.get_recent_responses(user_email)
         recent_keys = [r.key for r in recent]
-        print(f'recent: {"; ".join(recent_keys)}')
+        # print(f'recent: {"; ".join(recent_keys)}')
 
         # get preselected items
         preselect = Preselect.objects.filter(user=user_email)
         preselect_keys = [p.key for p in preselect]
-        print(f'preselected: {"; ".join(preselect_keys)}')
+        # print(f'preselected: {"; ".join(preselect_keys)}')
 
         # exclude recent items
         preselect_keys = [k for k in preselect_keys if k not in recent_keys]
-        print(f'preselected recent removed: {"; ".join(preselect_keys)}')
+        # print(f'preselected recent removed: {"; ".join(preselect_keys)}')
 
         # kick off preselection
         if len(preselect_keys) < 5:
@@ -125,20 +126,6 @@ class LearnDJ(object):
         m.save()
 
         return picked_items.key.to_list()
-
-
-    # def get_simple_smart_item(self, user_email, exclude=None):
-        
-    #     # get all items and user responses
-    #     items_df = self.get_item_df()
-    #     responses_df = self.get_user_responses_df(user_email)
-
-    #     # pick item
-    #     learn = Learn() 
-    #     item_row = learn.simple(items_df, responses_df, exclude)
-    #     picked_item = Item.objects.get(key=item_row['key'])
-
-    #     return picked_item
 
     def compare_text(self, given, correct):
         tc = TextComparison(given, correct)
@@ -214,6 +201,12 @@ class LearnDJ(object):
         r.user = email
         r.save()
 
-    # def get_first_item(self):
-    #     item = Item.objects.all()[0]       
-    #     return item
+    def update_content(self):
+
+        Item.objects.all().delete()
+
+        transfer_xlsx()
+
+    def remove_flagged(self):
+
+        Message.objects.filter(type='flag').delete()
