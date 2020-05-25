@@ -3,19 +3,11 @@ import random
 import pandas as pd
 import threading
 
-from quizit.text_comparison import TextComparison
 from quizit.models import Item, Response, Preselect, Message
-from quizit.format import Format
 from quizit.learn import Learn
 
 from transfer_xlsx import transfer_xlsx
 
-# import time
-
-# def test_delayed_action():
-#     print('waiting')
-#     time.sleep(20)
-#     print('delayed')
 
 class LearnDJ(object):
     """Interface between django and learn.py
@@ -127,65 +119,18 @@ class LearnDJ(object):
 
         return picked_items.key.to_list()
 
-    def compare_text(self, given, correct):
-        tc = TextComparison(given, correct)
-        change_count = tc.dist()
-        if change_count < 5:
-            change_str = tc.change()
-            change_str = 'Changes: ' + change_str
-            return change_str
-        return ''
-
-    def create_feedback(self, correct, item, answer):
-        # TODO: move this in the learn as this is not DJ specific
-        
-        if correct:
-            feedback = 'Correct: ' + item.question + ' = ' + item.answer
-        else:
-            change_str = self.compare_text(answer, item.answer)
-            feedback = 'Nope: ' + item.question + ' = ' + item.answer
-            feedback += '\nYou said: ' + answer
-            feedback += '\n' + change_str
-        return feedback
-
-    def at_to_alt(self, answer, alts):
-        if '@' in answer:
-            add = [answer.replace('@', l) for l in ['o', 'a']]
-            if len(alts) > 0:
-                alts = '|'.join([alts, *add])
-            else:
-                alts = '|'.join(add)
-        return alts
-
     def check(self, item_key, given_answer, email):
-        # TODO: move none django specific functionality to learn.py
+
+        # get item
         item = self.get_item_by_key(item_key)
         answer = item.answer
         alts = item.alts
         
-        # remove punctuation
-        given_answer = Format.add_accents(given_answer)
-        given_answer = Format.remove(given_answer, accents=False)
-        answer = Format.remove(answer, accents=False)
-        alts = Format.remove(alts, accents=False)
+        # check
+        correct, feedback = Learn().check(item, given_answer, answer, alts)
 
-        # remove accidentally introduced nan
-        alts = alts.replace('^nan', '')
-
-        # add @ variants
-        alts = self.at_to_alt(answer, alts)
-
-        # check answer
-        correct = given_answer == answer
-        if not correct and (len(alts) > 0):
-            for alt in alts.split('|'):
-                if given_answer == alt:
-                    print('used alternative')
-                    correct = True
-                    break # out of for loop if one of alternative is correct
+        # store
         self.save_response(item_key, correct, email)
-        
-        feedback = self.create_feedback(correct, item, given_answer)
 
         return correct, feedback
 
@@ -204,6 +149,7 @@ class LearnDJ(object):
     def update_content(self):
 
         Item.objects.all().delete()
+        Preselect.objects.all().delete() # preselected items should be deleted, as they may no longer exist
 
         transfer_xlsx()
 

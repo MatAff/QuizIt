@@ -1,9 +1,49 @@
-
 from random import random, randint
 from functools import reduce
 import numpy as np
 import pandas as pd
+import re
 
+from quizit.text_comparison import TextComparison
+from quizit.format import Format
+
+
+def split_by_pipe(t):
+        return t.split('|')
+
+def replace_at(t):
+    return [t.replace('@', l) for l in ['o', 'a']]
+
+def handle_paren(t):
+    in_paren = re.search(r'\((.*?)\)',t)
+    if in_paren is None:
+        return t
+    in_paren = in_paren.group(1)
+    with_paren = f'({in_paren})'
+    options = in_paren.split('/')
+    if len(options) == 1:
+        options.append('')
+    with_options =  [t.replace(with_paren, opt) for opt in options]
+    return [t.replace('  ', ' ') for t in with_options]
+
+def handle_string(t):
+    if '|' in t:
+        return split_by_pipe(t)
+    elif '@' in t:
+        return replace_at(t)
+    elif '(' in t:
+        return handle_paren(t)
+    else:
+        return [t]
+
+def expand_options(answer_list):
+    res_list = []
+    for e in answer_list:
+        res = handle_string(e)
+        if (len(res)) > 1 or (res[0] != e):
+            res = expand_options(res)
+        res_list.extend(res)     
+    return res_list   
 
 class Learn(object):
 
@@ -127,84 +167,58 @@ class Learn(object):
 
         return picked_items, word_score
 
-    # def simple(self, item_df, response_df, exclude=None):
+    def compare_text(self, given, correct):
+        tc = TextComparison(given, correct)
+        change_count = tc.dist()
+        if change_count < 5:
+            change_str = tc.change()
+            change_str = 'Changes: ' + change_str
+            return change_str
+        return ''
+
+    def create_feedback(self, correct, item, answer):
+        # TODO: move this in the learn as this is not DJ specific
         
-    #     # vary know threshold
-    #     rand_range = lambda low, high: random() * (high - low) + low
-    #     know_thresh = rand_range(self.know_thresh_low, self.know_thresh_high)
-    #     print(f'current know threshold: {know_thresh}')
+        if correct:
+            feedback = 'Correct: ' + item.question + ' = ' + item.answer
+        else:
+            change_str = self.compare_text(answer, item.answer)
+            feedback = 'Nope: ' + item.question + ' = ' + item.answer
+            feedback += '\nYou said: ' + answer
+            feedback += '\n' + change_str
+        return feedback
 
-    #     # if reponses is empty return random item
-    #     if response_df.shape[0] == 0:
-    #         random_int = randint(0, 10)
-    #         return item_df.iloc[random_int, :]
+    # def at_to_alt(self, answer, alts):
+    #     if '@' in answer:
+    #         add = [answer.replace('@', l) for l in ['o', 'a']]
+    #         if len(alts) > 0:
+    #             alts = '|'.join([alts, *add])
+    #         else:
+    #             alts = '|'.join(add)
+    #     return alts
 
-    #     # add item statistics
-    #     item_df, word_score = self.add_item_stats(item_df, response_df)
+    def check(self, item, given_answer, answer, alts):
 
-    #     # mark exclude as recent
-    #     if exclude is not None:
-    #         item_df.loc[item_df.key.isin(exclude), 'recent'] = True
+        # handle punctuation
+        given_answer = Format.add_accents(given_answer)
+        given_answer = Format.remove(given_answer, accents=False)
+        answer = Format.remove(answer, accents=False)
+        alts = Format.remove(alts, accents=False)
+        alts = alts.replace('^nan', '') # remove accidentally introduced nan
 
-    #     all_items = item_df
+        # add answer variations
+        answer_options = expand_options([answer, alts])
 
-    #     # sometimes pick random known
-    #     pick_known_prob = 0.15
-    #     if random() < pick_known_prob:
-    #         item_df = item_df[item_df.prob >= know_thresh]
-    #         nr_items = len(item_df.index)
-    #         if nr_items > 0:
-    #             print('picking random known item')
-    #             pos = randint(0, nr_items - 1)
-    #             return item_df.iloc[pos, :]
+        # check answer against correct answers
+        correct = False
+        for opt in answer_options:
+            if given_answer == opt:
+                correct = True
+                break
         
-    #     # pick item
-    #     item_df = item_df[item_df.prob < know_thresh]
-    #     # item_df = item_df.sort_values('prob', ascending=False)
-    #     item_df = item_df[item_df.recent==False]
-    #     item_row = item_df.iloc[0, :]
+        # create feedback
+        # TODO: create feedback using closest match
+        feedback = self.create_feedback(correct, item, given_answer)
 
-    #     # debug (print item around chosen item)
-    #     print(item_row.key)
-    #     chunk = self.get_chunk(all_items, 'key', item_row.key, 5)
-    #     with pd.option_context('display.max_columns', None, 'display.max_rows', None):
-    #         cols = ['key', 'recent', 'prob', 'n', 'mu', 'mu_run', 'mu_near']
-    #         print(chunk[cols])
+        return correct, feedback
 
-    #     return item_row
-
-    # # compute_item_mean, compute_item_mean_running, add_mu, add_w_mu
-    # def compute_item_mean(self, key, sorted_response_df):
-    #     item_responses = sorted_response_df[sorted_response_df.key==key]
-    #     if len(item_responses.index) == 0 : return 0.0 # handle no data
-    #     mu = item_responses.correct.mean()
-    #     mu = np.round(mu, 5)
-    #     return mu
-
-    # def compute_item_mean_running(self, key, sorted_response_df, r):
-    #     item_responses = sorted_response_df[sorted_response_df.key==key]
-    #     if len(item_responses.index) == 0 : return 0.0 # handle no data
-    #     resp_int = item_responses.correct.astype('int').values
-    #     mu_r = reduce(lambda a, b: a * (1-r) + b * r, resp_int[::-1])
-    #     return mu_r
-    
-    # def compute_item_count(self, key, sorted_response_df):
-    #     item_responses = sorted_response_df[sorted_response_df.key==key]
-    #     return len(item_responses.index)
-    
-    # def add_count(self, item_df, response_df):
-    #     item_count = lambda k: self.compute_item_count(k, response_df)
-    #     item_df['n'] = item_df.key.apply(item_count)
-    #     return item_df
-
-    # def add_mu(self, item_df, response_df):
-    #     item_mean = lambda k: self.compute_item_mean(k, response_df)
-    #     item_df['mu'] = item_df.key.apply(item_mean)
-    #     item_df['mu'] = self.order_retainer(item_df['mu'])
-    #     return item_df
-
-    # def add_w_mu(self, item_df, response_df, r):
-    #     run_mean = lambda k: self.compute_item_mean_running(k, response_df, r)
-    #     item_df['mu_run'] = item_df.key.apply(run_mean)
-    #     item_df['mu_run'] = self.order_retainer(item_df['mu_run'])
-    #     return item_df
