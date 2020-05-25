@@ -9,13 +9,17 @@ import pandas as pd
 
 from quizit.models import Item
 
-# sheet details - spanish
-base_path = '../data/'
-print(os.listdir(base_path))
-path = os.path.join(base_path, 'spanish.xlsx')
-topic = 'spanish'
 
 def transfer_xlsx():
+    
+    # sheet details - spanish
+    base_path = '../data/'
+    try:
+        print(os.listdir(base_path))
+    except: 
+        base_path = '/apps/django/django_projects/QuizIt/data'
+    path = os.path.join(base_path, 'spanish.xlsx')
+    topic = 'spanish'   
 
     # get content
     df = pd.read_excel(path)
