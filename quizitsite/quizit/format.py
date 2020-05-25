@@ -12,7 +12,7 @@ class Format(object):
 
     @staticmethod
     def remove_punc(t):
-        punc = '?!,.()'
+        punc = '?!,.'
         for e in punc:
             t = t.replace(e[0], '')
         return t

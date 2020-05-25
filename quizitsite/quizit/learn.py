@@ -24,7 +24,7 @@ def handle_paren(t):
     if len(options) == 1:
         options.append('')
     with_options =  [t.replace(with_paren, opt) for opt in options]
-    return [t.replace('  ', ' ') for t in with_options]
+    return [t.replace('  ', ' ').strip() for t in with_options]
 
 def handle_string(t):
     if '|' in t:
@@ -44,6 +44,8 @@ def expand_options(answer_list):
             res = expand_options(res)
         res_list.extend(res)     
     return res_list   
+
+# expand_options(['(el) inglés', 'nan'])
 
 class Learn(object):
 
@@ -208,6 +210,7 @@ class Learn(object):
 
         # add answer variations
         answer_options = expand_options([answer, alts])
+        print(answer_options)
 
         # check answer against correct answers
         correct = False
