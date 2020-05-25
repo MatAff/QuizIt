@@ -17,7 +17,7 @@ def transfer_xlsx():
     try:
         print(os.listdir(base_path))
     except: 
-        base_path = '/apps/django/django_projects/QuizIt/data'
+        base_path = '/home/bitnami/apps/django/django_projects/QuizIt/data'
     path = os.path.join(base_path, 'spanish.xlsx')
     topic = 'spanish'   
 
