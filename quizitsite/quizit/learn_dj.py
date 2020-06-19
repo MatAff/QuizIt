@@ -97,7 +97,7 @@ class LearnDJ(object):
             picked_key = preselect_keys[0]
         else:
             print('WARNING: preselection was empty.')
-            picked_key = self.get_smart_item_keys(self, user_email, 1, flagged_keys)[0]
+            picked_key = self.get_smart_item_keys(user_email, 1, flagged_keys)[0]
 
         return Item.objects.get(key=picked_key)
 

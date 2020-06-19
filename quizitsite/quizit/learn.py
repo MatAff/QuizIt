@@ -142,8 +142,8 @@ class Learn(object):
         
         # if reponses is small return random items
         if response_df.shape[0] < n:
-            rows = np.randint(0, 2 * n, n)
-            return item_df.iloc[rows, :]
+            rows = np.random.randint(0, 2 * n, n)
+            return item_df.iloc[rows, :], 0
 
         # add item statistics
         item_df, word_score = self.add_item_stats(item_df, response_df)
