@@ -2,12 +2,14 @@
 
 # Note: run instructions
 # python3 manage.py shell
-# import [filename]
+# import transfer_xlsx
+# transfer_xlsx.transfer_xlsx() to initiate transfer
+# OR transfer_xlsx.update() # also deletes existing items and preselect
 
 import os
 import pandas as pd
 
-from quizit.models import Item
+from quizit.models import Item, Preselect
 
 
 def transfer_xlsx():
@@ -46,4 +48,7 @@ def transfer_xlsx():
         print(item.question)
         item.save()
 
-# MA: main() disabled, need to call transfer_xlsx() to initiate transfer
+def update():
+    Item.objects.all().delete()
+    Preselect.objects.all().delete()
+    transfer_xlsx()

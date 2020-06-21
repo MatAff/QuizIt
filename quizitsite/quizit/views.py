@@ -81,5 +81,7 @@ def update_content(request):
 def remove_flagged(request):
 
     LearnDJ().remove_flagged()
+    
+    return flagged(request)
 
     # TODO: redirect
