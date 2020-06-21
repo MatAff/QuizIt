@@ -75,13 +75,15 @@ def update_content(request):
 
     LearnDJ().update_content()
 
+    return flagged(request)
+
     # TODO: redirect
 
 @login_required
 def remove_flagged(request):
 
     LearnDJ().remove_flagged()
-    
+
     return flagged(request)
 
     # TODO: redirect
