@@ -4,18 +4,25 @@
 # python3 manage.py shell
 # import transfer
 
-
+import os
 
 from quizit.models import Item
 from google_helper import Google
 
 # credentials
-FILE_GS_CREDS = '../../../credentials/google_sheets_credentials.json'
-FILE_GS_TOKEN = '../../../credentials/google_sheets_token.pickle'
+base_path = '../../../credentials'
+if os.path.exists(base_path) == False:
+    base_path = '/home/bitnami/creds/'
+FILE_GS_CREDS = os.path.join(base_path, 'google_sheets_credentials.json')
+FILE_GS_TOKEN = os.path.join(base_path, 'google_sheets_token.pickle')
+
+# verify credentials exist
+assert os.path.exists(FILE_GS_CREDS)
+assert os.path.exists(FILE_GS_TOKEN)
 
 # sheet details - spanish
 SHEET = {'id': '1LW69o3iJeJZUGCrJ1HfX19gMZXQNR0jGNbvscB6zQQA',
-         'name': 'WordList'}
+         'name': 'content'}
 topic = 'spanish'
 
 # # sheet details - russian
@@ -29,16 +36,18 @@ topic = 'spanish'
 # topic = 'french'
 
 
-def main():
+def transfer_google():
 
     # get sheet content
     gs = Google(FILE_GS_CREDS, FILE_GS_TOKEN)
-    df = gs.sheet_content(SHEET['id'], SHEET['name'], 3)
+    df = gs.sheet_content(SHEET['id'], SHEET['name'], 4)
     print(df.head(10))
 
     # add common key
     df.columns = ['question', 'answer', 'tag', 'alternatives']
     df['key'] = df.iloc[:, 0] + "|" + df.iloc[:, 1]
+    df['tag'] = df['tag'].fillna('')
+    df['alternatives'] = df['alternatives'].fillna('')
     df = df[df.key.duplicated() == False]
     df = df.reset_index()
     print(df.head(10))
@@ -46,6 +55,8 @@ def main():
     for r in range(df.shape[0]):
         print(r)
         row = df.iloc[r]
+        print(row)
+        # alts = row['alternatives'] is not None else ''
         item = Item(topic=topic,
                     index=row['index'],
                     question=row['question'],
@@ -55,9 +66,3 @@ def main():
                     alts=row['alternatives'])
         print(item.question)
         item.save()
-
-
-# if __name__ == '__main__':
-#     main()
-
-main()

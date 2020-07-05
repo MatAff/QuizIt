@@ -6,8 +6,8 @@ import threading
 from quizit.models import Item, Response, Preselect, Message
 from quizit.learn import Learn
 
-from transfer_xlsx import transfer_xlsx
-
+# from transfer_xlsx import transfer_xlsx
+from transfer_google import transfer_google
 
 class LearnDJ(object):
     """Interface between django and learn.py
@@ -151,7 +151,7 @@ class LearnDJ(object):
         Item.objects.all().delete()
         Preselect.objects.all().delete() # preselected items should be deleted, as they may no longer exist
 
-        transfer_xlsx()
+        transfer_google()
 
     def remove_flagged(self):
 
