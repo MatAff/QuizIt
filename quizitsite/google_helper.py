@@ -15,15 +15,15 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
+# reference: https://developers.google.com/docs/api/quickstart/python
+
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
 class Google(object):
 
-
     def __init__(self, file_creds, file_token):
         self.service = Google.get_service(file_creds, file_token)
-
 
     def get_creds(file_creds, file_token):
         creds = None
@@ -46,13 +46,11 @@ class Google(object):
                 pickle.dump(creds, token)
         return creds
 
-
     def get_service(file_creds, file_token):
         creds = Google.get_creds(file_creds, file_token)
         service = build('sheets', 'v4', credentials=creds)
         return service
-
-
+ 
     def sheet_content(self, sheet_id, sheet_name, nr_cols):
         range_text = sheet_name + '!A1:' + string.ascii_uppercase[nr_cols - 1]
         sheet = self.service.spreadsheets()

@@ -13,8 +13,8 @@ from google_helper import Google
 base_path = '../../../credentials'
 if os.path.exists(base_path) == False:
     base_path = '/home/bitnami/creds/'
-FILE_GS_CREDS = os.path.join(base_path, 'google_sheets_credentials.json')
-FILE_GS_TOKEN = os.path.join(base_path, 'google_sheets_token.pickle')
+FILE_GS_CREDS = os.path.join(base_path, 'google_sheets_credentials_secondary.json')
+FILE_GS_TOKEN = os.path.join(base_path, 'google_sheets_token_secondary.pickle')
 
 # verify credentials exist
 assert os.path.exists(FILE_GS_CREDS), FILE_GS_CREDS
