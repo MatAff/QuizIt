@@ -17,8 +17,8 @@ FILE_GS_CREDS = os.path.join(base_path, 'google_sheets_credentials.json')
 FILE_GS_TOKEN = os.path.join(base_path, 'google_sheets_token.pickle')
 
 # verify credentials exist
-assert os.path.exists(FILE_GS_CREDS)
-assert os.path.exists(FILE_GS_TOKEN)
+assert os.path.exists(FILE_GS_CREDS), FILE_GS_CREDS
+assert os.path.exists(FILE_GS_TOKEN), FILE_GS_TOKEN
 
 # sheet details - spanish
 SHEET = {'id': '1LW69o3iJeJZUGCrJ1HfX19gMZXQNR0jGNbvscB6zQQA',
