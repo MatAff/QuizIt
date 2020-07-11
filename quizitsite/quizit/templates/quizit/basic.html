@@ -9,26 +9,20 @@
 
 	{% block content %}
 
-
 	<head>
 		<link rel="stylesheet" type="text/css" href="{% static "quizit/basic.css" %}">	
 	</head>
 
 	<body>
-
 	
 		<script>
 
-			let changeColorArr = function(obj){
-				// let alts = ['aaa', 'bbb', 'ccc']
-				let alts_join = "{{ alts }}" 
+			let changeColorArr = function(obj, alts_join){
 				let l = obj.length
-				// alert(alts)
-				// alert(alts_join)
 				alts = alts_join.split("|")
-				// alert(alts)
-				// alert(obj)
+
 				document.getElementById('answerField').style.color = 'red';					
+
 				let arrayLength = alts.length;
 				for(let i = 0 ; i < arrayLength; i++) {
 					let val = alts[i];
@@ -53,7 +47,7 @@
 				<label name="question"> {{ item.question }} </label><br><br>
 				<input class="item" name="post_type" type="hidden" value="item_submit"> 
 				<input class="item" name="item_key" type="hidden" value="{{ item.key }}"> 
-				<input class="item" name="given_answer" type="text" value="" autocomplete="off" autofocus id="answerField" oninput="changeColorArr(value)">
+				<input class="item" name="given_answer" type="text" value="" autocomplete="off" autofocus id="answerField" oninput="changeColorArr(value, '{{ alts }}' )">
 
 			</form>
 		</div>

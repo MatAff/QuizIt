@@ -45,12 +45,7 @@ def basic(request, item_id=None):
     
             item = LearnDJ().get_item(request.user.email)
             alts = expand_options([item.answer, item.alts])
-            print(alts)
-            alts.append("___")
             alts = "|".join(alts)
-            # alts = alts.join("|")
-            print(alts)
-            print('joined')
 
             arg_dict =  {'item': item, 
                          'feedback': feedback, 
@@ -74,7 +69,6 @@ def basic(request, item_id=None):
     item = LearnDJ().get_item(request.user.email)
     alts = expand_options([item.answer, item.alts])
     alts = "|".join(alts)
-    print(alts)
 
     arg_dict = {'item': item, 
                 'feedback': '', 
