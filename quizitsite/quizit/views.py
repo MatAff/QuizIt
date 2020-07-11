@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 
 from quizit.learn_dj import LearnDJ
+from quizit.learn import expand_options
 from quizit.models import Message
 
 def index(request):
@@ -43,13 +44,21 @@ def basic(request, item_id=None):
             _, feedback = LearnDJ().check(prev_item_key, given_answer, request.user.email)
     
             item = LearnDJ().get_item(request.user.email)
+            alts = expand_options([item.answer, item.alts])
+            print(alts)
+            alts.append("___")
+            alts = "|".join(alts)
+            # alts = alts.join("|")
+            print(alts)
+            print('joined')
 
             arg_dict =  {'item': item, 
                          'feedback': feedback, 
                          'prev_item_key': prev_item_key, 
-                         'score_text': score_text}
-            return render(request, 'quizit/basic.html', arg_dict)
-        
+                         'score_text': score_text,
+                         'alts': alts}
+            return render(request, 'quizit/basic.html', arg_dict)        
+
         else:
 
             # flag
@@ -63,11 +72,15 @@ def basic(request, item_id=None):
             # TODO: fix side effect this also gets a new item
 
     item = LearnDJ().get_item(request.user.email)
+    alts = expand_options([item.answer, item.alts])
+    alts = "|".join(alts)
+    print(alts)
 
     arg_dict = {'item': item, 
                 'feedback': '', 
                 'prev_item_key': '', 
-                'score_text': score_text}
+                'score_text': score_text,
+                'alts': alts}
     return render(request, 'quizit/basic.html', arg_dict)
 
 @login_required
