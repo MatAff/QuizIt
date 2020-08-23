@@ -19,8 +19,11 @@ class LearnDJ(object):
 
     def get_tags(self, user_email):
         # TODO: move to logical location in this file
-        tags_res = Message.objects.filter(type='tags', user=user_email)
-        tags = tags_res[0].text
+        try:
+            tags_res = Message.objects.filter(type='tags', user=user_email)
+            tags = tags_res[0].text
+        except:
+            tags = ''
         print(tags)
         return tags
 
