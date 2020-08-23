@@ -34,6 +34,8 @@ def basic(request, item_id=None):
         print('score_text')
         print(score_text)
 
+    tags = LearnDJ().get_tags(request.user.email)
+
     if request.method == 'POST':
         
         if request.POST['post_type'] == 'item_submit':
@@ -50,13 +52,15 @@ def basic(request, item_id=None):
             arg_dict =  {'item': item, 
                          'feedback': feedback, 
                          'prev_item_key': prev_item_key, 
+                         'tags': tags,
                          'score_text': score_text,
                          'alts': alts}
             return render(request, 'quizit/basic.html', arg_dict)        
 
-        else:
+        elif request.POST['post_type'] == 'flag':
 
             # flag
+
             # TODO: move this to Learn dj
             m = Message(user=request.user.email,
                         key=request.POST['prev_item_key'],
@@ -66,6 +70,20 @@ def basic(request, item_id=None):
 
             # TODO: fix side effect this also gets a new item
 
+        elif request.POST['post_type'] == 'set_tags':
+
+            tags = request.POST['tags']
+
+            # set tags
+            LearnDJ().update_tags(request.user.email, tags)
+
+            # remove preselected items
+            LearnDJ().remove_preselected(request.user.email)
+
+        else:
+
+            raise NotImplementedError(request.POST['post_type'])
+
     item = LearnDJ().get_item(request.user.email)
     alts = expand_options([item.answer, item.alts])
     alts = "|".join(alts)
@@ -73,6 +91,7 @@ def basic(request, item_id=None):
     arg_dict = {'item': item, 
                 'feedback': '', 
                 'prev_item_key': '', 
+                'tags': tags,
                 'score_text': score_text,
                 'alts': alts}
     return render(request, 'quizit/basic.html', arg_dict)

@@ -148,20 +148,27 @@ class Learn(object):
         # add item statistics
         item_df, word_score = self.add_item_stats(item_df, response_df)
 
-        # mark exclude as recent
+        # mark excluded items as recent
         if exclude is not None:
             item_df.loc[item_df.key.isin(exclude), 'recent'] = True
 
         # retain known items
         known_items = item_df[item_df.prob >= know_thresh]
-                
-        # pick item
-        item_df = item_df[item_df.prob < know_thresh]
-        item_df = item_df[item_df.recent==False]
-        picked_items = item_df.iloc[0:n, :]
 
+        # exclude recent items
+        item_df = item_df[item_df.recent==False]
+        
+        # handle unknown items is small
+        if sum(item_df.prob < know_thresh) < 3:
+            know_thresh = 99 # this selects all items
+
+        # pick item
+        item_df = item_df[item_df.prob < know_thresh]        
+        picked_items = item_df.iloc[0:n, :] # put next not known, not recent item
+
+        # occasionally present random item
         if known_items.shape[0] > 10:
-            for r in range(picked_items.shape[0]):
+            for r in range(picked_items.shape[0]): # replace some picked items with randomly selected ones
                 if random() < self.pick_known_prob:
                     print('picking random known item')
                     pos = randint(0, known_items.shape[0] - 1)

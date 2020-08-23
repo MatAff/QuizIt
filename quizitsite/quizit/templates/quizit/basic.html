@@ -52,7 +52,6 @@
 			</form>
 		</div>
 
-
 		<br>
 		
 		<div class="feedback">		
@@ -61,6 +60,7 @@
 				{% csrf_token %}
 
 				<label name="feedback"> {{ feedback|linebreaks }} </label>
+				
 				<input class="item" name="post_type" type="hidden" value="flag"> 
 				<input class="feedback" name="feedback" type="hidden" value="{{ feedback|linebreaks }}"><br>
 				<input class="feedback" name="prev_item_key" type="hidden" value="{{ prev_item_key }}"><br>
@@ -69,10 +69,20 @@
 				<label class="feedback" name="score_text"> {{ score_text }} </label><br><br>
 				n~ = ñ &emsp;  e/ = é &emsp;  a/ = á &emsp;  i/ = í &emsp;  o/ = ó		
 			</form>
-
+		</div>
 		
 		<br>
 
+		<div class="feedback"></div>
+			<form method="post" class="feedback">
+
+				{% csrf_token %}
+
+				<input class="feedback" name="post_type" type="hidden" value="set_tags"> 
+				<input class="feedback" name="tags" type="text" value="{{ tags }}" autocomplete="off"> 
+				<button class="feedback" type="tags" value="set_tags">Set</button>
+				<br><br>
+			</form>
 		</div>	
 
 	</body>

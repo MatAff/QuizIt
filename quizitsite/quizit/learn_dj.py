@@ -17,6 +17,20 @@ class LearnDJ(object):
     should live in Learn.
     """
 
+    def get_tags(self, user_email):
+        # TODO: move to logical location in this file
+        tags_res = Message.objects.filter(type='tags', user=user_email)
+        tags = tags_res[0].text
+        print(tags)
+        return tags
+
+    def update_tags(self, user_email, tags):
+        # delete current tags and add tags
+        # TODO: move to logical location in this file
+        Message.objects.filter(type='tags', user=user_email).delete() # this may throw error if filter result is empty
+        m = Message(user=user_email, key=tags, type='tags', text=tags)
+        m.save()
+
     def get_item(self, user_email):
         return self.get_simple_smart_item_async(user_email)
 
@@ -48,17 +62,26 @@ class LearnDJ(object):
             flagged = '\n'.join([str(f) for f in flagged])
         return flagged
 
-    def get_item_df(self):
+    def get_item_df(self, tags=None):
         items = Item.objects.all()
         item_list = [r.to_dict() for r in items]
         item_df = pd.DataFrame(item_list)
+
+        if tags is not None:
+            if sum(item_df.tags.str.contains(tags)):
+                item_df = item_df[item_df.tags.str.contains(tags)]
+
+        print(item_df.shape) # dev
         return item_df
 
     def get_recent_responses(self, user_email, n=5):
         return Response.objects.filter(user=user_email).order_by('-id')[:n]
 
-    def do_preselect(self, user_email, exclude=None):
-        item_keys = self.get_smart_item_keys(user_email, 5, exclude)
+    def remove_preselected(self, user_email):
+        Preselect.objects.filter(user=user_email).delete() # this may throw error if preselect is empty
+
+    def do_preselect(self, user_email, exclude=None, tags=None):
+        item_keys = self.get_smart_item_keys(user_email, 5, exclude, tags)
         # print(f'item_key for preselect{"; ".join(item_keys)}')
         
         # remove current with fresh ones
@@ -68,6 +91,9 @@ class LearnDJ(object):
             preselect.save()
 
     def get_simple_smart_item_async(self, user_email):
+
+        # get tags
+        tags = self.get_tags(user_email)
 
         # get flagged responses
         flagged = self.get_flagged()
@@ -90,20 +116,20 @@ class LearnDJ(object):
 
         # kick off preselection
         if len(preselect_keys) < 5:
-            t = threading.Thread(target=self.do_preselect, args=[user_email, flagged_keys]) 
+            t = threading.Thread(target=self.do_preselect, args=[user_email, flagged_keys, tags]) 
             t.start()
 
         if len(preselect_keys) > 0:
             picked_key = preselect_keys[0]
         else:
             print('WARNING: preselection was empty.')
-            picked_key = self.get_smart_item_keys(user_email, 1, flagged_keys)[0]
+            picked_key = self.get_smart_item_keys(user_email, 1, flagged_keys, tags)[0]
 
         return Item.objects.get(key=picked_key)
 
-    def get_smart_item_keys(self, user_email, n, exclude=None):
+    def get_smart_item_keys(self, user_email, n, exclude=None, tags=None):
         
-        item_df = self.get_item_df()
+        item_df = self.get_item_df(tags) # TODO: update to take into account tags
         response_df = self.get_user_responses_df(user_email)
 
         picked_items, word_score = Learn().simple_n(item_df, response_df, n, exclude)
