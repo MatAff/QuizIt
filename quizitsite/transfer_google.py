@@ -57,8 +57,8 @@ def transfer_google():
     df['alternatives'] = df['alternatives'].fillna('')
     
     # check
-    assert len(df.index) > 0
-    assert "tag" in df.columns
+    if len(df.index) < 100 or "tag" not in df.columns:
+        raise ValueError(df.head())
     
     # handle duplicates
     df = duplicates_join_drop(df, 'key', 'tag')
