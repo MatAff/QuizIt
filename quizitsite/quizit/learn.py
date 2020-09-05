@@ -160,11 +160,14 @@ class Learn(object):
         
         # handle unknown items is small
         if sum(item_df.prob < know_thresh) < 3:
-            know_thresh = 99 # this selects all items
+            print('most are known')
+            rows = np.random.randint(0, len(item_df.index), n)
+            return item_df.iloc[rows, :], word_score
+            # know_thresh = 99 # this selects all items
 
         # pick item
         item_df = item_df[item_df.prob < know_thresh]        
-        picked_items = item_df.iloc[0:n, :] # put next not known, not recent item
+        picked_items = item_df.iloc[0:n, :] # put next not known, not recent item # this fails, as it repeats the same items!!!
 
         # occasionally present random item
         if known_items.shape[0] > 10:
