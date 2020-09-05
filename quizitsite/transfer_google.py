@@ -49,15 +49,18 @@ def transfer_google():
     gs = Google(FILE_GS_CREDS, FILE_GS_TOKEN)
     df = gs.sheet_content(SHEET['id'], SHEET['name'], 4)
     print(df.head(10))
-
-    # check
-    assert len(df.index) > 0
-
+    
     # add common key
     df.columns = ['question', 'answer', 'tag', 'alternatives']
     df['key'] = df.iloc[:, 0] + "|" + df.iloc[:, 1]
     df['tag'] = df['tag'].fillna('')
     df['alternatives'] = df['alternatives'].fillna('')
+    
+    # check
+    assert len(df.index) > 0
+    assert "tag" in df.columns
+    
+    # handle duplicates
     df = duplicates_join_drop(df, 'key', 'tag')
     # df = df[df.key.duplicated() == False]
     df = df.reset_index()
