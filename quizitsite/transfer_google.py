@@ -37,7 +37,7 @@ topic = 'spanish'
 
 
 def duplicates_join_drop(df, dup_col, join_col):
-    tag_df = df.groupby(dup_col).agg(lambda r: ";".join(r[join_col]))
+    tag_df = df[[dup_col, join_col]].groupby(dup_col).agg(lambda r: ";".join(r))
     df.loc[:, join_col] = tag_df.loc[df[dup_col], join_col].values
     df = df[df[dup_col].duplicated() == False]
     return df
