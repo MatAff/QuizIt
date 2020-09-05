@@ -50,6 +50,9 @@ def transfer_google():
     df = gs.sheet_content(SHEET['id'], SHEET['name'], 4)
     print(df.head(10))
 
+    # check
+    assert len(df.index) > 0
+
     # add common key
     df.columns = ['question', 'answer', 'tag', 'alternatives']
     df['key'] = df.iloc[:, 0] + "|" + df.iloc[:, 1]
